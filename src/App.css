@@ -1,0 +1,10 @@
+:root {
+  --colorprimary-button: #305381;
+  --color-primary: #305381;
+  --color-secondary: #d16125;
+  --color-delete: #e35959;
+}
+
+* {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
