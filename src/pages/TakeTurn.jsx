@@ -1,19 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import ButtonBasic from "../components/buttons/ButtonBasic";
 import { MaintContainer } from "../components/containers/MainContainer";
-import Modal from "../components/modal/Modal";
 import ModalKeyBoard from "../components/TakeTurn/ModalKeyboard";
 import { setIsOpenModal } from "../store/slice/isOpenModal.slice";
 import logo from "../assets/logos/logo.png";
 import { setIsActiveModal } from "../store/slice/isActiveModal.slice";
 import { setValueDocument } from "../store/slice/valueDocument.slice";
 import { useParams } from "react-router-dom";
-import {
-  getAllButtonsByUser,
-  viewButtonTurnero,
-} from "../store/slice/turneros/turneroThunk";
+import { viewButtonTurnero } from "../store/slice/turneros/turneroThunk";
 import io from "socket.io-client";
 
 const TakeTurn = () => {
@@ -23,9 +19,7 @@ const TakeTurn = () => {
   const cancelModal = (cancel) => dispatch(setIsActiveModal(cancel));
   const setIsOpen = (isOpen) => dispatch(setIsOpenModal(isOpen));
   const changeNumber = (number) => dispatch(setValueDocument(number));
-  const { buttons, viewButtonsTurnero, buttonsTurnero } = useSelector(
-    (state) => state.turnero
-  );
+  const { buttonsTurnero } = useSelector((state) => state.turnero);
 
   const openModal = () => {
     dispatch(setIsOpenModal(true));
@@ -39,8 +33,7 @@ const TakeTurn = () => {
 
   useEffect(() => {
     dispatch(viewButtonTurnero(id));
-    console.log(buttons);
-  }, []);
+  }, [dispatch, id]);
 
   useEffect(() => {
     const socket = io(process.env.REACT_APP_URL_SOCKET);
@@ -52,7 +45,7 @@ const TakeTurn = () => {
     return () => {
       socket.disconnect();
     };
-  }, []);
+  }, [dispatch, id]);
 
   return (
     <MaintContainer
@@ -64,7 +57,7 @@ const TakeTurn = () => {
     >
       {isOpen && <ModalKeyBoard />}
       <MainContainerTurn>
-        <img src={logo} />
+        <img src={logo} alt="Logo" />
         <h1>Seleccione una opcion</h1>
         <div>
           {buttonsTurnero.buttons?.map((button) => (

@@ -1,21 +1,9 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Navigate, NavLink, Outlet, useNavigate } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import Loading2 from "../animations/Loading2";
-import ViewPassword from "../animations/ViewPassword";
-import {
-  iconButton,
-  iconRol,
-  iconTurnero,
-  iconUser,
-  volverMenuLogo,
-} from "../assets/svg/svgs";
+import { iconButton, iconTurnero, volverMenuLogo } from "../assets/svg/svgs";
 import ContainerItemMenu from "../components/usuarios/ContainerItemMenu";
-import CreateUser from "../components/usuarios/CreateUser";
 
 const Turneros = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const afterMenu = () => {

@@ -1,12 +1,10 @@
 import localforage from "localforage";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { Navigate, Outlet, useNavigate } from "react-router-dom";
+
+import { Outlet, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import Loading2 from "../animations/Loading2";
-import DashboarAdmin from "../components/dashboard/DashboarAdmin";
+
 import Navigation from "../components/nav/Navigation";
-import CreateUser from "../components/usuarios/CreateUser";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -20,6 +18,7 @@ const Dashboard = () => {
         setUser(value);
       }
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (user?.user.username === "admin") {

@@ -1,9 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import localforage from "localforage";
-import { useLink } from "../../utils/ScreenFull";
+
 import { setStateLoading } from "./activeLoading.slice";
-import { setIsLoadingOptions } from "./isLoadingOptions.slice";
 
 // Cambiamos mySlice por el nombre de nuestro slice (usersSlice, toDosSlice...)
 export const login = createSlice({
@@ -36,7 +35,6 @@ export const getAllUsers = () => async (dispatch) => {
   };
 
   try {
-    let isFetching = true;
     dispatch(setStateLoading(true));
     setTimeout(async () => {
       const users = await axios.get(
@@ -47,7 +45,7 @@ export const getAllUsers = () => async (dispatch) => {
       dispatch(allUsers(users.data));
 
       // establecer el estado local para indicar que la petición ha finalizado
-      isFetching = false;
+
       dispatch(setStateLoading(false));
     }, 5000);
   } catch (err) {

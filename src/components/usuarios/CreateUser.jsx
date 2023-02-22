@@ -1,11 +1,9 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { getDataWithToken } from "../../utils/getDataToken";
 import InputLine from "../inputs/InputLine";
 import SelectLine from "../inputs/SelectLine";
 import ButtonBasic from "../buttons/ButtonBasic";
-import Modal from "../modal/Modal";
 import { useDispatch, useSelector } from "react-redux";
 import { createUser } from "../../store/slice/users";
 import Loading3 from "../../animations/Loading3";
@@ -65,6 +63,7 @@ const CreateUser = () => {
     } else {
       setDisabled(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nameUser, user, password, repeatPassword, rol]);
 
   const handleSubmit = (e) => {
@@ -108,7 +107,7 @@ const CreateUser = () => {
               setNameUser(e.target.value);
             }}
             textError={
-              (message.value == "name" || message.value == "existTwo") &&
+              (message.value === "name" || message.value === "existTwo") &&
               message.message
             }
           />
@@ -121,7 +120,7 @@ const CreateUser = () => {
               setUser(e.target.value);
             }}
             textError={
-              (message.value == "username" || message.value == "existTwo") &&
+              (message.value === "username" || message.value === "existTwo") &&
               message.message
             }
           />
@@ -130,7 +129,7 @@ const CreateUser = () => {
             textName="Contraseña"
             value={password}
             textError={
-              errorPassword.value == "password" && errorPassword.message
+              errorPassword.value === "password" && errorPassword.message
             }
             onChange={(e) => {
               setPassword(e.target.value);
@@ -141,7 +140,7 @@ const CreateUser = () => {
             textName="Confirmar contraseña"
             value={repeatPassword}
             textError={
-              errorPassword.value == "repeatPassword" && errorPassword.message
+              errorPassword.value === "repeatPassword" && errorPassword.message
             }
             onChange={(e) => {
               setRepeatPassword(e.target.value);

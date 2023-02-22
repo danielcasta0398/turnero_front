@@ -24,11 +24,7 @@ export const getAllButtonsByUser =
 export const createButtonApi = (data) => (dispatch) => {
   dispatch(setDataTurneros({ option: "isLoading", value: true }));
   setTimeout(async () => {
-    const resData = await getDataWithToken(
-      "turner/button/create",
-      "POST",
-      data
-    );
+    await getDataWithToken("turner/button/create", "POST", data);
     dispatch(setDataTurneros({ option: "isLoading", value: false }));
     dispatch(setDataTurneros({ option: "viewCreateButton", value: false }));
     dispatch(viewButtonTurnero(data.userId));

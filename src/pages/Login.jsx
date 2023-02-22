@@ -32,6 +32,7 @@ const Login = () => {
 
   useEffect(() => {
     sessionUser();
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const sessionUser = async () => {
@@ -52,10 +53,10 @@ const Login = () => {
     console.log(password.length);
     if (event.name === "user") {
       console.log(event.value.length);
-      if (event.value.length < 4 && event.value.length != 0) {
+      if (event.value.length < 4 && event.value.length !== 0) {
         console.log("Email incorrecto");
         setErrEmail(true);
-      } else if (password.length >= 8 && event.value.length != 0) {
+      } else if (password.length >= 8 && event.value.length !== 0) {
         console.log("entramos emial correcto");
         setErrEmail(false);
         return setIsDisabled(false);
@@ -96,7 +97,7 @@ const Login = () => {
             <Loading />
           ) : (
             <>
-              {loginState.error == 1003 && (
+              {loginState.error === 1003 && (
                 <MsgError
                   text=" No podemos iniciar sesión con esas credenciales. verifica tu usuario y
         contraseña e inténtalo de nuevo."

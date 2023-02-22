@@ -1,13 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import Loading2 from "../../animations/Loading2";
-import ViewPassword from "../../animations/ViewPassword";
-import {
-  setIsLoadingOptions,
-  stopLoadingOptions,
-} from "../../store/slice/isLoadingOptions.slice";
-import { setLoading } from "../../store/slice/loadings/loading.slice";
+
 import { getAllUsers } from "../../store/slice/users";
 import { upperCase } from "../../utils/upperCase";
 
@@ -103,23 +98,6 @@ const ContainerImgUser = styled.div`
     align-items: center;
     color: white;
     font-weight: 500;
-  }
-`;
-
-const ContainerPassword = styled.div`
-  width: 25%;
-  display: flex;
-  justify-content: space-between;
-  padding-right: 20px;
-
-  input {
-    max-width: 80%;
-    background-color: none;
-    border: none;
-
-    &:disabled {
-      background-color: transparent;
-    }
   }
 `;
 
