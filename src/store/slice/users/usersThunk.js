@@ -12,7 +12,14 @@ export const loginUser = (user) => (dispatch) => {
     axios
       .post(`${process.env.REACT_APP_LINK_API}/login`, user)
       .then((res) => {
-        console.log(res.data);
+        const { user } = res.data;
+
+        if (user.roleId === 4) {
+          return localforage.setItem("user", res.data).then((value) => {
+            window.location.href = `verturnero/${user.id}`;
+          });
+        }
+
         localforage.setItem("user", res.data).then((value) => {
           window.location.href = "/dashboard";
         });
