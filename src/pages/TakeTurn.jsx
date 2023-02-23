@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import ButtonBasic from "../components/buttons/ButtonBasic";
@@ -8,18 +8,37 @@ import { setIsOpenModal } from "../store/slice/isOpenModal.slice";
 import logo from "../assets/logos/logo.png";
 import { setIsActiveModal } from "../store/slice/isActiveModal.slice";
 import { setValueDocument } from "../store/slice/valueDocument.slice";
-import { useParams } from "react-router-dom";
-import { viewButtonTurnero } from "../store/slice/turneros/turneroThunk";
+import { useNavigate, useParams } from "react-router-dom";
+import {
+  getAllButtonsByUser,
+  viewButtonTurnero,
+} from "../store/slice/turneros/turneroThunk";
 import io from "socket.io-client";
+import { getDataStorage } from "../utils/getDataStorage";
 
 const TakeTurn = () => {
   const isOpen = useSelector((state) => state.isOpenModal);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { id } = useParams();
   const cancelModal = (cancel) => dispatch(setIsActiveModal(cancel));
   const setIsOpen = (isOpen) => dispatch(setIsOpenModal(isOpen));
   const changeNumber = (number) => dispatch(setValueDocument(number));
-  const { buttonsTurnero } = useSelector((state) => state.turnero);
+  const { buttons } = useSelector((state) => state.turnero);
+
+  useEffect(() => {
+    getDataStorage("user").then((user) => {
+      if (
+        user &&
+        user.user.session === "active" &&
+        (user.user.roleId === 1 || 4)
+      ) {
+        dispatch(getAllButtonsByUser(id));
+      } else {
+        navigate("/login");
+      }
+    });
+  }, []);
 
   const openModal = () => {
     dispatch(setIsOpenModal(true));
@@ -31,21 +50,19 @@ const TakeTurn = () => {
     );
   };
 
-  useEffect(() => {
-    dispatch(viewButtonTurnero(id));
-  }, [dispatch, id]);
-
+  //Conexión con el socket
   useEffect(() => {
     const socket = io(process.env.REACT_APP_URL_SOCKET);
 
-    socket.on("viewButtons", (data) => {
-      dispatch(viewButtonTurnero(id));
+    socket.on("test", (data) => {
+      console.log(data);
+      dispatch(getAllButtonsByUser(id));
     });
 
     return () => {
       socket.disconnect();
     };
-  }, [dispatch, id]);
+  }, []);
 
   return (
     <MaintContainer
@@ -58,9 +75,9 @@ const TakeTurn = () => {
       {isOpen && <ModalKeyBoard />}
       <MainContainerTurn>
         <img src={logo} alt="Logo" />
-        <h1>Seleccione una opcion</h1>
+        <h1>Seleccione una opciones</h1>
         <div>
-          {buttonsTurnero.buttons?.map((button) => (
+          {buttons?.buttons?.map((button) => (
             <ButtonBasic
               key={button.id}
               textButton={button.nameButton}

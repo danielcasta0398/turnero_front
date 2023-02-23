@@ -30,7 +30,7 @@ const Login = () => {
     dispatch(loginUser({ username: user.toLowerCase(), password }));
   };
 
-  useEffect(() => {
+  /* useEffect(() => {
     sessionUser();
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -47,7 +47,7 @@ const Login = () => {
     }
 
     return dispatch(isActiveSession());
-  };
+  };*/
 
   const validateForm = (event) => {
     console.log(password.length);
