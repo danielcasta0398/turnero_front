@@ -1,9 +1,30 @@
-import * as React from "react";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
+import { setDataTurneros } from "../../store/slice/turneros/turnero.slice";
 
-export default function MultipleValues({ label, placeholder, options = [] }) {
+export default function MultipleValues({
+  label,
+  placeholder,
+  options = [],
+  valueDefault = [],
+}) {
+  const dispatch = useDispatch();
+  const [selectedValues, setSelectedValues] = useState(valueDefault);
+  const [value, setValue] = useState([]);
+
+  const handleSelectedValues = (event, values) => {
+    const idsUsers = values.map((user) => user.idUser);
+    dispatch(setDataTurneros({ option: "userNotiffication", value: idsUsers }));
+    setSelectedValues(values);
+  };
+
+  useEffect(() => {
+    setSelectedValues(valueDefault);
+  }, [valueDefault]);
+
   return (
     <ContaintAutocomplete
       multiple
@@ -19,6 +40,9 @@ export default function MultipleValues({ label, placeholder, options = [] }) {
           placeholder={placeholder}
         />
       )}
+      value={selectedValues}
+      isOptionEqualToValue={(option, value) => option.idUser === value.idUser}
+      onChange={handleSelectedValues}
     />
   );
 }

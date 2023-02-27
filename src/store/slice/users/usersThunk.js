@@ -85,6 +85,7 @@ export const createUser = (data) => {
   };
 };
 
+// Funcion para obtener todos los usuarios
 export const getAllUsers = () => {
   return async (dispatch) => {
     dispatch(setLoading(true));

@@ -15,6 +15,7 @@ import {
 } from "../store/slice/turneros/turneroThunk";
 import io from "socket.io-client";
 import { getDataStorage } from "../utils/getDataStorage";
+import { setDataTurneros } from "../store/slice/turneros/turnero.slice";
 
 const TakeTurn = () => {
   const isOpen = useSelector((state) => state.isOpenModal);
@@ -40,7 +41,8 @@ const TakeTurn = () => {
     });
   }, []);
 
-  const openModal = () => {
+  const openModal = (id) => {
+    dispatch(setDataTurneros({ option: "buttonId", value: id }));
     dispatch(setIsOpenModal(true));
     cancelModal(
       setTimeout(() => {
@@ -77,13 +79,16 @@ const TakeTurn = () => {
         <img src={logo} alt="Logo" />
         <h1>Seleccione una opciones</h1>
         <div>
-          {buttons?.buttons?.map((button) => (
-            <ButtonBasic
-              key={button.id}
-              textButton={button.nameButton}
-              onClick={openModal}
-            />
-          ))}
+          {buttons?.buttons?.map(
+            (button) =>
+              button.status === "active" && (
+                <ButtonBasic
+                  key={button.id}
+                  textButton={button.nameButton}
+                  onClick={() => openModal(button.id)}
+                />
+              )
+          )}
         </div>
       </MainContainerTurn>
     </MaintContainer>

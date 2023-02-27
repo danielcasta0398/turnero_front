@@ -15,6 +15,8 @@ import Turneros from "../pages/Turneros";
 import ViewTurneros from "../components/turneros/ViewTurneros";
 import CreateTurnero from "../components/turneros/CreateTurnero";
 import ViewButtons from "../components/turneros/ViewButtons";
+import Turnos from "../pages/Turnos";
+import ViewTurnos from "../components/turnos/ViewTurnos";
 
 const Router = () => {
   return (
@@ -43,6 +45,12 @@ const Router = () => {
           </Route>
           <Route element={<Turneros />}>
             <Route path="/dashboard/turneros" element={<ViewTurneros />} />
+            <Route path="/dashboard/crearturnero" element={<CreateTurnero />} />
+            <Route path="/dashboard/roles" element={<ViewRoles />} />
+            <Route path="/dashboard/botones" element={<ViewButtons />} />
+          </Route>
+          <Route element={<Turnos />}>
+            <Route path="/dashboard/turnos" element={<ViewTurnos />} />
             <Route path="/dashboard/crearturnero" element={<CreateTurnero />} />
             <Route path="/dashboard/roles" element={<ViewRoles />} />
             <Route path="/dashboard/botones" element={<ViewButtons />} />

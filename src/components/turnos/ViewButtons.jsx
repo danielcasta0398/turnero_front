@@ -3,42 +3,34 @@ import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import Loading2 from "../../animations/Loading2";
 import NotFound from "../../animations/NotFound";
-import { setDataTurneros } from "../../store/slice/turneros/turnero.slice";
+import ViewPassword from "../../animations/ViewPassword";
 import {
-  getAllButtonsByUser,
-  getAllTurneros,
-} from "../../store/slice/turneros/turneroThunk";
-import {
-  getAllUsers,
-  getUsersByRol,
-  setTurneros,
-} from "../../store/slice/users";
+  setIsLoadingOptions,
+  stopLoadingOptions,
+} from "../../store/slice/isLoadingOptions.slice";
+import { setLoading } from "../../store/slice/loadings/loading.slice";
+import { getAllUsers, getUsersByRol } from "../../store/slice/users";
 import { upperCase } from "../../utils/upperCase";
 import ButtonBasic from "../buttons/ButtonBasic";
-import RowTable from "../table/RowTable";
-import TestViewButtons from "./TestViewButtons";
+import CreateButton from "./CreateButton";
 
-const ViewTurneros = () => {
+const ViewButtons = () => {
   const dispatch = useDispatch();
+  const users = useSelector((state) => state.users.resApi);
   const resUsers = useSelector((state) => state.users);
-  const {
-    turneros: { users: turneros },
-    isLoading,
-    viewButtons,
-  } = useSelector((state) => state.turnero);
-
-  const changeViewButtons = (id) => {
-    dispatch(getAllButtonsByUser(id));
-    dispatch(setDataTurneros({ option: "viewButtons", value: !viewButtons }));
-    dispatch(setDataTurneros({ option: "idUser", value: id }));
-  };
+  const loading = useSelector((state) => state.loading);
+  const [stateButton, setStateButton] = useState(true);
 
   useEffect(() => {
-    dispatch(getAllTurneros());
+    dispatch(getUsersByRol(4));
   }, [dispatch]);
 
-  if (false) {
+  if (loading) {
     return <Loading2 />;
+  }
+
+  if (stateButton) {
+    return <CreateButton state={{ stateButton, setStateButton }} />;
   }
 
   return (
@@ -46,28 +38,48 @@ const ViewTurneros = () => {
       {resUsers.msgError && resUsers.msgError.code === 101 ? (
         <ContainerNotFount>
           <NotFound />
-          <p>No hay ningun turnero creado</p>
+          <p>No hay ningun boton creado</p>
+          <ButtonBasic
+            textButton={"Crear Boton"}
+            styl={{ width: "50%" }}
+            onClick={() => setStateButton(true)}
+          />
         </ContainerNotFount>
       ) : (
         <>
           <ContainerNameTable>
-            <p style={{ width: "20%" }}>Usuario</p>
-            <p style={{ width: "20%" }}>Nombre</p>
-            <p style={{ width: "15%" }}>Rol</p>
-            <p style={{ width: "20%" }}>Conexion</p>
+            <p style={{ width: "30%" }}>Usuario</p>
+            <p style={{ width: "25%" }}>Nombre</p>
+            <p>Rol</p>
           </ContainerNameTable>
 
           <ContAllUsersTable>
-            {turneros?.map((turnero) => {
+            {users?.map((user) => {
               return (
-                <RowTable
-                  key={turnero.id}
-                  username={turnero.username}
-                  name={turnero.name}
-                  session={turnero.session}
-                  idUser={turnero.id}
-                  viewButtons={viewButtons}
-                />
+                <ContainerOnlyUser key={user.id}>
+                  <ContainerImgUser>
+                    <div>{upperCase(user.username[0])}</div>
+                    <p>{user.username}</p>
+                  </ContainerImgUser>
+                  <p
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      width: "25%",
+                    }}
+                  >
+                    {user.name}
+                  </p>
+                  <p
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      width: "25%",
+                    }}
+                  >
+                    Turnero
+                  </p>
+                </ContainerOnlyUser>
               );
             })}
           </ContAllUsersTable>
@@ -77,7 +89,7 @@ const ViewTurneros = () => {
   );
 };
 
-export default ViewTurneros;
+export default ViewButtons;
 
 const ContainerPrincipalViewUser = styled.div`
   display: flex;
@@ -107,7 +119,7 @@ const ContainerOnlyUser = styled.div`
 `;
 
 const ContainerImgUser = styled.div`
-  width: 20%;
+  width: 30%;
   height: 100%;
   display: flex;
   align-items: center;
@@ -162,30 +174,4 @@ const ContainerNotFount = styled.div`
     font-size: 2em;
     color: #5f6368;
   }
-`;
-
-const ContainerSession = styled.div`
-  display: flex;
-  align-items: center;
-  width: 20%;
-
-  p {
-    background-color: ${(props) => (props.session ? "#b2e7b2" : "#fdb8b8")};
-    padding: 2px 10px;
-    border-radius: 20px;
-    color: ${(props) => (props.session ? "#2e7d32" : "#c62828")};
-  }
-`;
-
-const ContainerConfig = styled.div`
-  display: flex;
-  width: 20%;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  position: relative;
-
-  /*height: 50%;
-    margin: 0;
-    font-size: 1em;}}*/
 `;

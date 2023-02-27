@@ -16,9 +16,10 @@ import {
 import { upperCase } from "../../utils/upperCase";
 import ButtonBasic from "../buttons/ButtonBasic";
 import RowTable from "../table/RowTable";
+import BasicTabs from "../tabs/BasicTabs";
 import TestViewButtons from "./TestViewButtons";
 
-const ViewTurneros = () => {
+const ViewTurnos = () => {
   const dispatch = useDispatch();
   const resUsers = useSelector((state) => state.users);
   const {
@@ -37,7 +38,7 @@ const ViewTurneros = () => {
     dispatch(getAllTurneros());
   }, [dispatch]);
 
-  if (false) {
+  if (isLoading) {
     return <Loading2 />;
   }
 
@@ -46,38 +47,18 @@ const ViewTurneros = () => {
       {resUsers.msgError && resUsers.msgError.code === 101 ? (
         <ContainerNotFount>
           <NotFound />
-          <p>No hay ningun turnero creado</p>
+          <p>No hay ningun Turno Pendiente</p>
         </ContainerNotFount>
       ) : (
-        <>
-          <ContainerNameTable>
-            <p style={{ width: "20%" }}>Usuario</p>
-            <p style={{ width: "20%" }}>Nombre</p>
-            <p style={{ width: "15%" }}>Rol</p>
-            <p style={{ width: "20%" }}>Conexion</p>
-          </ContainerNameTable>
-
-          <ContAllUsersTable>
-            {turneros?.map((turnero) => {
-              return (
-                <RowTable
-                  key={turnero.id}
-                  username={turnero.username}
-                  name={turnero.name}
-                  session={turnero.session}
-                  idUser={turnero.id}
-                  viewButtons={viewButtons}
-                />
-              );
-            })}
-          </ContAllUsersTable>
-        </>
+        <MainContVieTurns>
+          <BasicTabs />
+        </MainContVieTurns>
       )}
     </ContainerPrincipalViewUser>
   );
 };
 
-export default ViewTurneros;
+export default ViewTurnos;
 
 const ContainerPrincipalViewUser = styled.div`
   display: flex;
@@ -85,6 +66,8 @@ const ContainerPrincipalViewUser = styled.div`
   width: 100%;
   height: 100%;
 `;
+
+const MainContVieTurns = styled.div``;
 
 const ContainerNameTable = styled.div`
   width: 100%;

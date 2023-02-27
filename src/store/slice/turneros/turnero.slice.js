@@ -5,11 +5,18 @@ export const turneroSlice = createSlice({
   initialState: {
     turneros: [],
     buttons: [],
+    onlyButtonInfo: {},
     idUser: "",
     buttonsTurnero: [],
+    userNotiffication: [],
+    editButton: false,
     viewButtons: false,
+    isLoadingEdit: false,
     isLoading: false,
+    isLoadingChangeState: false,
     viewCreateButton: false,
+    clickIdButton: "",
+    buttonId: "",
   },
   reducers: {
     setDataTurneros: (state, action) => {

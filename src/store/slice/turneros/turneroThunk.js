@@ -11,9 +11,11 @@ export const getAllTurneros = () => (dispatch) => {
 };
 
 export const getAllButtonsByUser =
-  (id, time = 1000) =>
+  (id, time = 1000, loading = true) =>
   (dispatch) => {
-    dispatch(setDataTurneros({ option: "isLoading", value: true }));
+    if (loading) {
+      dispatch(setDataTurneros({ option: "isLoading", value: true }));
+    }
     setTimeout(async () => {
       const resData = await getDataWithToken(`turner/allbuttons/${id}`, "GET");
       dispatch(setDataTurneros({ option: "buttons", value: resData }));
@@ -42,3 +44,36 @@ export const viewButtonTurnero =
       // dispatch(setDataTurneros({ option: "isLoading", value: false }));
     }, time);
   };
+
+export const changeStateButton = (id, userId) => async (dispatch) => {
+  dispatch(setDataTurneros({ option: "isLoadingChangeState", value: true }));
+  dispatch(setDataTurneros({ option: "clickIdButton", value: id }));
+  const res = await getDataWithToken(
+    `turner/button/updatestate/${id}`,
+    "PATCH"
+  );
+  dispatch(getAllButtonsByUser(userId, 0, false));
+
+  setTimeout(async () => {
+    dispatch(setDataTurneros({ option: "isLoadingChangeState", value: false }));
+  }, 500);
+};
+
+export const getButtonById = (id) => async (dispatch) => {
+  dispatch(setDataTurneros({ option: "isLoading", value: true }));
+  const res = await getDataWithToken(`turner/button/getbyid/${id}`, "GET");
+  dispatch(setDataTurneros({ option: "onlyButtonInfo", value: res }));
+  dispatch(setDataTurneros({ option: "isLoading", value: false }));
+};
+
+export const updateButtons = (id, data) => async (dispatch) => {
+  dispatch(setDataTurneros({ option: "isLoadingEdit", value: true }));
+  const res = await getDataWithToken(
+    `turner/button/update/${id}`,
+    "PATCH",
+    data
+  );
+  dispatch(setDataTurneros({ option: "isLoading", value: false }));
+  dispatch(setDataTurneros({ option: "viewCreateButton", value: false }));
+  dispatch(setDataTurneros({ option: "isLoadingEdit", value: false }));
+};

@@ -4,6 +4,7 @@ import KeyBoardNumber from "../keyboard/KeyBoardNumber";
 import Modal from "../modal/Modal";
 import ButtonBasic from "../buttons/ButtonBasic";
 import { setValueDocument } from "../../store/slice/valueDocument.slice";
+import { createTurn } from "../../store/slice/turns/turnsThunk";
 
 const ModalKeyBoard = () => {
   const valueDocument = useSelector((state) => state.valueDocument);
@@ -13,6 +14,11 @@ const ModalKeyBoard = () => {
     const value = valueDocument.toString();
     dispatch(setValueDocument(value.slice(0, -1)));
     console.log(valueDocument);
+  };
+
+  const createTurner = () => {
+    dispatch(createTurn());
+    console.log("create turner");
   };
 
   const render = (
@@ -53,6 +59,7 @@ const ModalKeyBoard = () => {
           />
           <ButtonBasic
             textButton={"Continuar"}
+            onClick={createTurner}
             styl={{ fontSize: "1.5em", height: "60px", margin: "0" }}
           />
         </div>

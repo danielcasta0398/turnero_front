@@ -10,6 +10,7 @@ import { loadingSlice } from "./slice/loadings";
 import { messageSlice } from "./slice/messages";
 import { turneroSlice } from "./slice/turneros/turnero.slice";
 import { consultorioSlice } from "./slice/consultorios";
+import { turnSlice } from "./slice/turns/turns.slice";
 
 export default configureStore({
   reducer: {
@@ -24,5 +25,6 @@ export default configureStore({
     message: messageSlice.reducer,
     turnero: turneroSlice.reducer,
     consultorio: consultorioSlice.reducer,
+    turn: turnSlice.reducer,
   },
 });

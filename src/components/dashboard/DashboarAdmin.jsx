@@ -81,6 +81,9 @@ const DashboarAdmin = () => {
         </svg>
       ),
       text: "Turnos",
+      onClick: () => {
+        navigate("/dashboard/turnos");
+      },
     },
   ];
 
