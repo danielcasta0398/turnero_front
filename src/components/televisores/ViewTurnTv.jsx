@@ -99,10 +99,10 @@ const ViewTurnTv = () => {
       <ContBodyTurnTv>
         <ContTurnTv>
           {turns?.map((turno) => (
-            <div key={turno.id}>
+            <ContTurnTvLeft key={turno.id}>
               <p>{turno.sequence}</p>
-              <p>{turno.user.name}</p>
-            </div>
+              <p>{turno.user.name.toUpperCase()}</p>
+            </ContTurnTvLeft>
           ))}
         </ContTurnTv>
         <ContVideo>
@@ -148,24 +148,6 @@ const ContTurnTv = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  div {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    padding: 0 20px;
-    width: 90%;
-    height: 10%;
-    background-color: var(--color-primary);
-    border-radius: 20px;
-    margin-bottom: 20px;
-
-    p {
-      color: white;
-      font-size: 2.5em;
-      font-weight: 700;
-    }
-  }
 `;
 
 const ContVideo = styled.div`
@@ -215,5 +197,30 @@ const ContOnlyTurn = styled.div`
   p {
     font-size: 3em;
     font-weight: 700;
+  }
+`;
+
+const ContTurnTvLeft = styled.div`
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0 20px;
+  width: 90%;
+  height: 10%;
+  background-color: var(--color-primary);
+  border-radius: 20px;
+  margin-bottom: 20px;
+
+  p {
+    color: white;
+    font-size: 2em;
+    font-weight: 700;
+    width: 55%;
+    text-align: center;
+  }
+
+  p:nth-child(1) {
+    font-size: 2.5em;
+    width: 45%;
   }
 `;
