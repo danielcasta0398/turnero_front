@@ -2,7 +2,7 @@ import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import React, { useState } from "react";
 import styled from "styled-components";
 
-const SelectLine = ({ options, state, rol }) => {
+const SelectLine = ({ options = [], state, rol, label }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleOpen = () => {
@@ -33,7 +33,7 @@ const SelectLine = ({ options, state, rol }) => {
   return (
     <FormControlStyle variant="standard" sx={{ m: 1, width: "80%" }}>
       <InputLabelStyle id="demo-simple-select-standard-label">
-        Selecciona el rol
+        {label}
       </InputLabelStyle>
       <SelectStyle
         labelId="demo-simple-select-standard-label"

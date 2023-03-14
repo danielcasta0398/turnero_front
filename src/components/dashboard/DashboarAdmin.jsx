@@ -64,6 +64,9 @@ const DashboarAdmin = () => {
     {
       svg: iconTv,
       text: "Televisores",
+      onClick: () => {
+        navigate("/dashboard/tv");
+      },
     },
     {
       svg: (

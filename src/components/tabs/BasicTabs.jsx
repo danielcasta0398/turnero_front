@@ -6,6 +6,7 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import styled from "styled-components";
 import BasicTable from "../table/BasicTable";
+import BasicTableActive from "../table/BasicTableActive";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -62,7 +63,7 @@ export default function BasicTabs() {
         <BasicTable />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        Item Two
+        <BasicTableActive />
       </TabPanel>
     </Box>
   );

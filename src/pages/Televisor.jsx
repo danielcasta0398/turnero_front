@@ -1,46 +1,60 @@
-import localforage from "localforage";
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-
-import { iconRol, iconUser, volverMenuLogo } from "../assets/svg/svgs";
-import ModalAsignacion from "../components/turnos/ModalAsignacion";
+import {
+  iconButton,
+  iconTurnero,
+  iconTv,
+  volverMenuLogo,
+} from "../assets/svg/svgs";
 import ContainerItemMenu from "../components/usuarios/ContainerItemMenu";
+import { useTts } from "react-tts";
 
-const Turnos = () => {
+const Televisor = () => {
   const navigate = useNavigate();
-  const [role, setRole] = useState(null);
-  const { viewModal } = useSelector((state) => state.turn);
-
-  useEffect(() => {
-    localforage.getItem("user").then((value) => {
-      setRole(value.user.roleId);
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const afterMenu = () => {
     navigate("/dashboard");
   };
 
+  const { speak } = useTts();
+
+  const handleClick = () => {
+    speak({ text: "URG 001 Porfavor pasar a caja 1" });
+  };
+
   return (
     <MainContainerUser>
-      {viewModal && <ModalAsignacion />}
       <>
         <ContainerMenu>
           <ContainerItemsMenu>
+            <NavLink to="/dashboard/creartv">
+              <ContainerAddUser>
+                <svg
+                  width="512"
+                  height="512"
+                  version="1.1"
+                  viewBox="0 0 469.33 469.33"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M437.332 192h-160V32c0-17.664-14.336-32-32-32H224c-17.664 0-32 14.336-32 32v160H32c-17.664 0-32 14.336-32 32v21.332c0 17.664 14.336 32 32 32h160v160c0 17.664 14.336 32 32 32h21.332c17.664 0 32-14.336 32-32v-160h160c17.664 0 32-14.336 32-32V224c0-17.664-14.336-32-32-32zm0 0"
+                    data-original="#000000"
+                  />
+                </svg>
+                <p>Crear Televisor</p>
+              </ContainerAddUser>
+            </NavLink>
+
             <ContainerItemMenu
-              icon={iconUser}
-              text="Turnos"
-              path="/dashboard/consultorios"
+              icon={iconTv}
+              text="Televisores"
+              path="/dashboard/tv"
             />
-            {role !== 2 && role !== 5 && (
-              <ContainerVolverMenu onClick={() => afterMenu()}>
-                {volverMenuLogo}
-                <p>Volver al menu</p>
-              </ContainerVolverMenu>
-            )}
+            <button onClick={handleClick}>Reproducir</button>
+            <ContainerVolverMenu onClick={() => afterMenu()}>
+              {volverMenuLogo}
+              <p>Volver al menu</p>
+            </ContainerVolverMenu>
           </ContainerItemsMenu>
         </ContainerMenu>
         <ContainerUser>
@@ -53,7 +67,7 @@ const Turnos = () => {
   );
 };
 
-export default Turnos;
+export default Televisor;
 
 const MainContainerUser = styled.div`
   height: 100%;

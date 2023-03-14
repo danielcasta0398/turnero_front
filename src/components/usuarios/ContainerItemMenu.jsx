@@ -37,6 +37,12 @@ const ContainerOnlyItemMenu = styled.div`
     height: 20px;
     fill: gray;
 
+    & > path {
+      width: 20px;
+      height: 20px;
+      fill: gray;
+    }
+
     g {
       //fill: #1967d2;
       width: 20px;
@@ -55,6 +61,12 @@ const StyledNavLink = styled(NavLink)`
 
       svg {
         fill: #1967d2;
+
+        & > path {
+          width: 20px;
+          height: 20px;
+          fill: #1967d2;
+        }
 
         g {
           fill: #1967d2;

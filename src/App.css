@@ -8,3 +8,34 @@
 * {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
+
+@media print {
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: #fff;
+  }
+
+  .print-container {
+    width: 72mm;
+    height: 100mm;
+    margin: 0;
+    padding: 0;
+  }
+
+  img {
+    width: 100%;
+    height: auto;
+  }
+
+  h1,
+  h2 {
+    text-align: center;
+    margin: 0;
+    padding: 0;
+  }
+
+  button {
+    display: none;
+  }
+}

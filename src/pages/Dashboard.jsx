@@ -5,6 +5,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import Navigation from "../components/nav/Navigation";
+import TestImpresion from "../components/TestImpresion";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -21,14 +22,12 @@ const Dashboard = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (user?.user.username === "admin") {
-    return (
-      <MainContainerDashboard>
-        <Navigation />
-        <Outlet />
-      </MainContainerDashboard>
-    );
-  }
+  return (
+    <MainContainerDashboard>
+      <Navigation />
+      <Outlet />
+    </MainContainerDashboard>
+  );
 
   if (user) {
     return (

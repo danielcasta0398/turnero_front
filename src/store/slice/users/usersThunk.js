@@ -6,6 +6,7 @@ import { msgError } from "../login.slice";
 import { setMessage } from "../messages";
 import { setMsgErrorUser, setRoles, setUser, setUserApi } from "./user.slice";
 
+//Manejador de login y redireccion dependiendo del rol
 export const loginUser = (user) => (dispatch) => {
   dispatch(setLoading(true));
   setTimeout(() => {
@@ -14,9 +15,27 @@ export const loginUser = (user) => (dispatch) => {
       .then((res) => {
         const { user } = res.data;
 
+        if (user.roleId === 2 || user.roleId === 5) {
+          return localforage.setItem("user", res.data).then((value) => {
+            window.location.href = "/dashboard/turnos";
+          });
+        }
+
+        if (user.roleId === 5) {
+          return localforage.setItem("user", res.data).then((value) => {
+            window.location.href = "/dashboard/turnos";
+          });
+        }
+
         if (user.roleId === 4) {
           return localforage.setItem("user", res.data).then((value) => {
             window.location.href = `verturnero/${user.id}`;
+          });
+        }
+
+        if (user.roleId === 3) {
+          return localforage.setItem("user", res.data).then((value) => {
+            window.location.href = `/verturnostv/${user.id}`;
           });
         }
 

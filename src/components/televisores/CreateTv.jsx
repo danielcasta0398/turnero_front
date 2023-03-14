@@ -1,32 +1,28 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { getDataWithToken } from "../../utils/getDataToken";
 import InputLine from "../inputs/InputLine";
 import SelectLine from "../inputs/SelectLine";
 import ButtonBasic from "../buttons/ButtonBasic";
+import Modal from "../modal/Modal";
 import { useDispatch, useSelector } from "react-redux";
 import { createUser } from "../../store/slice/users";
 import Loading3 from "../../animations/Loading3";
 import { setMessage } from "../../store/slice/messages";
-import { getAllTvs } from "../../store/slice/televisores/televisoresThunk";
 
-const CreateUser = () => {
+const CreateTv = () => {
   const dispatch = useDispatch();
   const [roles, setRoles] = useState([]);
   const [nameUser, setNameUser] = useState("");
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
-  const [rol, setRol] = useState("");
   const [disabled, setDisabled] = useState(true);
   const [errorPassword, setErrorPassword] = useState("");
-  const [stateTv, setStateTv] = useState("");
-  const [isCaja, setIsCaja] = useState(false);
-  const [televisores, setTelevisores] = useState([]);
   const loading = useSelector((state) => state.loading);
   const message = useSelector((state) => state.message);
   const userData = useSelector((state) => state.users.userData);
-  const { tvs } = useSelector((state) => state.televisores);
 
   useEffect(() => {
     getDataWithToken("rols/mostrar", "GET").then((res) => {
@@ -36,16 +32,7 @@ const CreateUser = () => {
 
       setRoles(roles);
     });
-
-    dispatch(getAllTvs());
   }, []);
-
-  useEffect(() => {
-    const tv = tvs.users?.map((tv) => {
-      return { value: tv.id, label: tv.name };
-    });
-    setTelevisores(tv);
-  }, [tvs, stateTv]);
 
   const validatePassword = (e) => {
     if (e.target.value !== password) {
@@ -71,29 +58,13 @@ const CreateUser = () => {
   }, [password]);
 
   useEffect(() => {
-    if (rol === 2 || rol === 5) {
-      setIsCaja(true);
-    } else {
-      setIsCaja(false);
-    }
-
-    console.log(rol);
-
-    if (
-      nameUser &&
-      user &&
-      password &&
-      repeatPassword === password &&
-      rol &&
-      ((rol !== 2 && rol !== 5) || stateTv)
-    ) {
+    if (nameUser && user && password && repeatPassword === password) {
       dispatch(setMessage(""));
       setDisabled(false);
     } else {
       setDisabled(true);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [nameUser, user, password, repeatPassword, rol, stateTv]);
+  }, [nameUser, user, password, repeatPassword]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -103,8 +74,7 @@ const CreateUser = () => {
         name: nameUser.toLocaleLowerCase().trim(),
         username: user,
         password,
-        rol,
-        tvId: stateTv,
+        rol: 3,
       })
     );
   };
@@ -115,7 +85,6 @@ const CreateUser = () => {
       setUser("");
       setPassword("");
       setRepeatPassword("");
-      setRol("");
       setDisabled(true);
     }
   }, [userData]);
@@ -123,10 +92,10 @@ const CreateUser = () => {
   return (
     <>
       {userData.status === "200" && (
-        <MessageSuccess>Usuario Creado Correctamente</MessageSuccess>
+        <MessageSuccess>Televisor Creado Correctamente</MessageSuccess>
       )}
       <MainContainerCreateUser sucess={userData.status}>
-        <h1>Crear Usuario</h1>
+        <h1>Crear Televisor</h1>
         <form onSubmit={handleSubmit}>
           <InputLine
             type="text"
@@ -137,7 +106,7 @@ const CreateUser = () => {
               setNameUser(e.target.value);
             }}
             textError={
-              (message.value === "name" || message.value === "existTwo") &&
+              (message.value == "name" || message.value == "existTwo") &&
               message.message
             }
           />
@@ -150,7 +119,7 @@ const CreateUser = () => {
               setUser(e.target.value);
             }}
             textError={
-              (message.value === "username" || message.value === "existTwo") &&
+              (message.value == "username" || message.value == "existTwo") &&
               message.message
             }
           />
@@ -159,7 +128,7 @@ const CreateUser = () => {
             textName="Contraseña"
             value={password}
             textError={
-              errorPassword.value === "password" && errorPassword.message
+              errorPassword.value == "password" && errorPassword.message
             }
             onChange={(e) => {
               setPassword(e.target.value);
@@ -170,29 +139,15 @@ const CreateUser = () => {
             textName="Confirmar contraseña"
             value={repeatPassword}
             textError={
-              errorPassword.value === "repeatPassword" && errorPassword.message
+              errorPassword.value == "repeatPassword" && errorPassword.message
             }
             onChange={(e) => {
               setRepeatPassword(e.target.value);
               validatePassword(e);
             }}
           />
-          <SelectLine
-            options={roles}
-            state={setRol}
-            rol={rol}
-            label="Selecciona el rol"
-          />
-          {isCaja && (
-            <SelectLine
-              options={televisores}
-              rol={stateTv}
-              state={setStateTv}
-              label="Selecciona un televisor"
-            />
-          )}
           <ButtonBasic
-            textButton={loading ? <Loading3 /> : "Crear Usuario"}
+            textButton={loading ? <Loading3 /> : "Crear Televisor"}
             isDisabled={disabled}
             colorDisabled={
               loading && { status: true, color: "var(--colorprimary-button)" }
@@ -204,7 +159,7 @@ const CreateUser = () => {
   );
 };
 
-export default CreateUser;
+export default CreateTv;
 
 const MainContainerCreateUser = styled.div`
   padding: ${(props) => (props.sucess ? "0px 40px 40px 40px;" : "40px")};

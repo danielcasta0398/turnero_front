@@ -1,33 +1,90 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import io from "socket.io-client";
-import { getTurns } from "../../store/slice/turns/turnsThunk";
+import {
+  getTurns,
+  getTurnsById,
+  getTurnsByUser,
+} from "../../store/slice/turns/turnsThunk";
+import localforage from "localforage";
+import { setDataTurn } from "../../store/slice/turns/turns.slice";
 
 const BasicTable = () => {
+  const socket = io(process.env.REACT_APP_URL_SOCKET);
   const dispatch = useDispatch();
   const { turns } = useSelector((state) => state.turn);
+  const [turnos, setTurnos] = useState(useSelector((state) => state.turn));
+  const [role, setRole] = useState(null);
 
   useEffect(() => {
-    dispatch(getTurns());
-  }, [dispatch]);
+    localforage.getItem("user").then((value) => {
+      setRole(value.user.roleId);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  /******  Obtenemos los turnos dependiendo el rol  *******/
+  useEffect(() => {
+    if (role === 1) {
+      dispatch(getTurns("pendding"));
+    } else {
+      dispatch(getTurnsByUser("pendding"));
+    }
+  }, [role]);
 
   useEffect(() => {
-    console.log(turns);
-  }, [turns]);
-
-  useEffect(() => {
-    const socket = io(process.env.REACT_APP_URL_SOCKET);
-
     socket.on("turn", (data) => {
-      console.log(data);
-      dispatch(getTurns());
+      console.log("data", data);
+      if (data === 4) {
+        console.log("entro");
+        return dispatch(getTurnsByUser("pendding"));
+      }
+
+      console.log("aca rambien");
+      if (role === 1) {
+        dispatch(getTurns("pendding"));
+      }
     });
 
-    return () => {
-      socket.disconnect();
-    };
-  }, []);
+    socket.on("pendientes", (data) => {
+      if (role !== 1) {
+        return dispatch(getTurnsByUser("pendding"));
+      }
+
+      if (role === 1) {
+        dispatch(getTurns("pendding"));
+      }
+    });
+
+    if (turns.turns) {
+      socket.on("llamar", (data) => {
+        console.log(turnos);
+        const updateTurns = turns?.turns?.filter((turn) => {
+          return turn.id !== data;
+        });
+
+        const newData = {
+          ...turns,
+          turns: updateTurns,
+        };
+
+        dispatch(setDataTurn({ option: "turns", value: newData }));
+      });
+
+      return () => {
+        socket.disconnect();
+      };
+    }
+  }, [turns]);
+
+  const callTurn = (id) => {
+    const test = turns.turns.filter((turn) => turn.id === id);
+    dispatch(setDataTurn({ option: "onlyTurn", value: test }));
+    dispatch(setDataTurn({ option: "viewModal", value: true }));
+    socket.emit("llamar", id);
+    dispatch(getTurnsById(id));
+  };
 
   return (
     <MainContTable>
@@ -51,12 +108,16 @@ const BasicTable = () => {
             <li className="servicio">{turn.servicio.nameButton}</li>
             <li className="cedula">{turn.cedulaUser}</li>
             <li className="name">
-              {turn.nameUser ? turn.nameUser : "Juan Daniel Castaño castañeda"}
+              {turn.nameUser ? turn.nameUser : "Sin nombre"}
             </li>
           </RowTable>
           <RowTable gap="20px">
             <li className="pendiente">Pendiente</li>
-            <li>Acciones</li>
+            <li>
+              <ButtonLlamar onClick={() => callTurn(turn.id)}>
+                Llamar
+              </ButtonLlamar>
+            </li>
           </RowTable>
         </ContRows>
       ))}
@@ -142,7 +203,7 @@ const RowTable = styled.ul`
     border-radius: 15px;
     font-weight: 500;
     text-align: center;
-    font-size: 0.8em;
+    font-size: 1em;
   }
 
   li {
@@ -156,4 +217,11 @@ const ContRows = styled.div`
   display: flex;
   justify-content: space-between;
   padding: 5px 0;
+`;
+
+const ButtonLlamar = styled.button`
+  background-color: #000000;
+  color: white;
+  width: 100px;
+  border-radius: 15px;
 `;

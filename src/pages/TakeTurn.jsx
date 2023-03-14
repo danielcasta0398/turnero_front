@@ -16,6 +16,7 @@ import {
 import io from "socket.io-client";
 import { getDataStorage } from "../utils/getDataStorage";
 import { setDataTurneros } from "../store/slice/turneros/turnero.slice";
+import TestImpresion from "../components/TestImpresion";
 
 const TakeTurn = () => {
   const isOpen = useSelector((state) => state.isOpenModal);
@@ -26,6 +27,7 @@ const TakeTurn = () => {
   const setIsOpen = (isOpen) => dispatch(setIsOpenModal(isOpen));
   const changeNumber = (number) => dispatch(setValueDocument(number));
   const { buttons } = useSelector((state) => state.turnero);
+  const { isPrint } = useSelector((state) => state.turn);
 
   useEffect(() => {
     getDataStorage("user").then((user) => {
@@ -74,6 +76,7 @@ const TakeTurn = () => {
         alignItems: "center",
       }}
     >
+      {isPrint && <TestImpresion />}
       {isOpen && <ModalKeyBoard />}
       <MainContainerTurn>
         <img src={logo} alt="Logo" />

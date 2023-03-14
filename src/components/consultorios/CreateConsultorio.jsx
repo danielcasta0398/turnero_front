@@ -10,6 +10,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { createUser } from "../../store/slice/users";
 import Loading3 from "../../animations/Loading3";
 import { setMessage } from "../../store/slice/messages";
+import { getAllTvs } from "../../store/slice/televisores/televisoresThunk";
+import { NavLink } from "react-router-dom";
 
 const CreateConsultorio = () => {
   const dispatch = useDispatch();
@@ -20,19 +22,23 @@ const CreateConsultorio = () => {
   const [repeatPassword, setRepeatPassword] = useState("");
   const [disabled, setDisabled] = useState(true);
   const [errorPassword, setErrorPassword] = useState("");
+  const [televisores, setTelevisores] = useState([]);
+  const [stateTv, setStateTv] = useState("");
   const loading = useSelector((state) => state.loading);
   const message = useSelector((state) => state.message);
   const userData = useSelector((state) => state.users.userData);
+  const { tvs } = useSelector((state) => state.televisores);
 
   useEffect(() => {
-    getDataWithToken("rols/mostrar", "GET").then((res) => {
-      const roles = res.roles_totales.map((rol) => {
-        return { value: rol.id, label: rol.nombreRol };
-      });
-
-      setRoles(roles);
-    });
+    dispatch(getAllTvs());
   }, []);
+
+  useEffect(() => {
+    const tv = tvs.users?.map((tv) => {
+      return { value: tv.id, label: tv.name };
+    });
+    setTelevisores(tv);
+  }, [tvs, stateTv]);
 
   const validatePassword = (e) => {
     if (e.target.value !== password) {
@@ -58,13 +64,19 @@ const CreateConsultorio = () => {
   }, [password]);
 
   useEffect(() => {
-    if (nameUser && user && password && repeatPassword === password) {
+    if (
+      nameUser &&
+      user &&
+      password &&
+      stateTv &&
+      repeatPassword === password
+    ) {
       dispatch(setMessage(""));
       setDisabled(false);
     } else {
       setDisabled(true);
     }
-  }, [nameUser, user, password, repeatPassword]);
+  }, [nameUser, user, password, repeatPassword, stateTv]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -75,6 +87,7 @@ const CreateConsultorio = () => {
         username: user,
         password,
         rol: 5,
+        tvId: stateTv,
       })
     );
   };
@@ -85,6 +98,7 @@ const CreateConsultorio = () => {
       setUser("");
       setPassword("");
       setRepeatPassword("");
+      setStateTv("");
       setDisabled(true);
     }
   }, [userData]);
@@ -146,6 +160,30 @@ const CreateConsultorio = () => {
               validatePassword(e);
             }}
           />
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <SelectLine
+              options={televisores}
+              rol={stateTv}
+              state={setStateTv}
+              label="Selecciona un televisor"
+            />
+
+            {televisores?.length === 0 && (
+              <TextNoTvs>
+                No puedes crear un consultorio sin un televisor.¡No te
+                preocupes! Puedes crear uno fácilmente{" "}
+                <NavLink to="/dashboard/creartv">aquí.</NavLink>
+              </TextNoTvs>
+            )}
+          </div>
+
           <ButtonBasic
             textButton={loading ? <Loading3 /> : "Crear consultorio"}
             isDisabled={disabled}
@@ -199,4 +237,19 @@ const MessageSuccess = styled.p`
   margin-bottom: 18px;
   text-align: center;
   color: #0d6a0d;
+`;
+
+const TextNoTvs = styled.p`
+  width: 80%;
+  text-align: start;
+  font-size: 0.9em;
+  background-color: var(--color-primary);
+  padding: 5px;
+  border-radius: 10px;
+  color: white;
+  font-weight: 700;
+
+  a {
+    color: #ffbe7b;
+  }
 `;

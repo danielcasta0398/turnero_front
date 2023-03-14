@@ -17,6 +17,10 @@ import CreateTurnero from "../components/turneros/CreateTurnero";
 import ViewButtons from "../components/turneros/ViewButtons";
 import Turnos from "../pages/Turnos";
 import ViewTurnos from "../components/turnos/ViewTurnos";
+import Televisor from "../pages/Televisor";
+import CreateTv from "../components/televisores/CreateTv";
+import ViewTvs from "../components/televisores/ViewTvs";
+import ViewTurnTv from "../components/televisores/ViewTurnTv";
 
 const Router = () => {
   return (
@@ -25,6 +29,7 @@ const Router = () => {
         <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/login" element={<Login />} />
         <Route path="/verturnero/:id" element={<TakeTurn />} />
+        <Route path="/verturnostv/:id" element={<ViewTurnTv />} />
         <Route element={<Dashboard />}>
           <Route path="/dashboard" element={<DashboarAdmin />} />
           <Route element={<Usuarios />}>
@@ -53,6 +58,12 @@ const Router = () => {
             <Route path="/dashboard/turnos" element={<ViewTurnos />} />
             <Route path="/dashboard/crearturnero" element={<CreateTurnero />} />
             <Route path="/dashboard/roles" element={<ViewRoles />} />
+            <Route path="/dashboard/botones" element={<ViewButtons />} />
+          </Route>
+          {/* Rutas para navegar al apartado de Televisores */}
+          <Route element={<Televisor />}>
+            <Route path="/dashboard/tv" element={<ViewTvs />} />
+            <Route path="/dashboard/creartv" element={<CreateTv />} />
             <Route path="/dashboard/botones" element={<ViewButtons />} />
           </Route>
         </Route>

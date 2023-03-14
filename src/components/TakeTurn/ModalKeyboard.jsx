@@ -5,10 +5,13 @@ import Modal from "../modal/Modal";
 import ButtonBasic from "../buttons/ButtonBasic";
 import { setValueDocument } from "../../store/slice/valueDocument.slice";
 import { createTurn } from "../../store/slice/turns/turnsThunk";
+import Print from "../../animations/Print";
 
 const ModalKeyBoard = () => {
   const valueDocument = useSelector((state) => state.valueDocument);
   const dispatch = useDispatch();
+  const state = true;
+  const { isPrint } = useSelector((state) => state.turn);
 
   const deleteEndCharacter = () => {
     const value = valueDocument.toString();
@@ -23,47 +26,56 @@ const ModalKeyBoard = () => {
 
   const render = (
     <MainContainerModalKeyBoard>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: "20px",
-          width: "50%",
-        }}
-      >
-        <h1
-          style={{
-            fontSize: "2.5em",
-            fontWeight: "700",
-            width: "400px",
-            textAlign: "center",
-          }}
-        >
-          Ingrese su numero de documento
-        </h1>
-        <KeyBoardNumber />
-      </div>
-      <ContainerInput>
-        <InputNumber type="text" value={valueDocument} disabled={true} />
-        <p style={{ color: "#305381", fontWeight: 700 }}>
-          Continuar sin documento
-        </p>
-        <div>
-          <ButtonBasic
-            textButton={"Borrar"}
-            bgColor="#909090"
-            bgHvColor={"#a6a6a6"}
-            onClick={deleteEndCharacter}
-            styl={{ fontSize: "1.5em", height: "60px", margin: "0" }}
-          />
-          <ButtonBasic
-            textButton={"Continuar"}
-            onClick={createTurner}
-            styl={{ fontSize: "1.5em", height: "60px", margin: "0" }}
-          />
-        </div>
-      </ContainerInput>
+      {isPrint ? (
+        <ContainerPrint>
+          <h1>Imprimiendo Turno</h1>
+          <Print />
+        </ContainerPrint>
+      ) : (
+        <>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: "20px",
+              width: "50%",
+            }}
+          >
+            <h1
+              style={{
+                fontSize: "2.5em",
+                fontWeight: "700",
+                width: "400px",
+                textAlign: "center",
+              }}
+            >
+              Ingrese su numero de documento
+            </h1>
+            <KeyBoardNumber />
+          </div>
+          <ContainerInput>
+            <InputNumber type="text" value={valueDocument} disabled={true} />
+            <p style={{ color: "#305381", fontWeight: 700 }}>
+              Continuar sin documento
+            </p>
+            <div>
+              <ButtonBasic
+                textButton={"Borrar"}
+                bgColor="#909090"
+                bgHvColor={"#a6a6a6"}
+                onClick={deleteEndCharacter}
+                styl={{ fontSize: "1.5em", height: "60px", margin: "0" }}
+              />
+              <ButtonBasic
+                textButton={"Continuar"}
+                onClick={createTurner}
+                styl={{ fontSize: "1.5em", height: "60px", margin: "0" }}
+              />
+            </div>
+          </ContainerInput>
+        </>
+      )}
     </MainContainerModalKeyBoard>
   );
 
@@ -108,4 +120,17 @@ const InputNumber = styled.input`
 
 const MainContainerModalKeyBoard = styled.div`
   display: flex;
+`;
+
+const ContainerPrint = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  h1 {
+    font-size: 4em;
+    color: var(--color-primary);
+  }
 `;

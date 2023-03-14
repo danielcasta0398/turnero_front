@@ -30,25 +30,6 @@ const Login = () => {
     dispatch(loginUser({ username: user.toLowerCase(), password }));
   };
 
-  /* useEffect(() => {
-    sessionUser();
-    //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const sessionUser = async () => {
-    dispatch(setLoading(true));
-    const user = await getDataStorage("user");
-
-    if (user) {
-      if (user.user.session === "active") {
-        console.log("entramos");
-        return navigate("/dashboard");
-      }
-    }
-
-    return dispatch(isActiveSession());
-  };*/
-
   const validateForm = (event) => {
     console.log(password.length);
     if (event.name === "user") {
@@ -99,7 +80,7 @@ const Login = () => {
             <>
               {loginState.error === 1003 && (
                 <MsgError
-                  text=" No podemos iniciar sesión con esas credenciales. verifica tu usuario y
+                  text="No podemos iniciar sesión con esas credenciales. verifica tu usuario y
         contraseña e inténtalo de nuevo."
                 />
               )}
