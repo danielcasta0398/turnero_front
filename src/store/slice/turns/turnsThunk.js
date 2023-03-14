@@ -58,7 +58,7 @@ export const getTurnsByUser = (status) => {
 
 export const getTurnsById = (id) => {
   return async (dispatch) => {
-    //const data = await getDataWithToken(`turn/updatestate/${id}`, "PATCH");
+    const data = await getDataWithToken(`turn/updatestate/${id}`, "PATCH");
   };
 };
 
