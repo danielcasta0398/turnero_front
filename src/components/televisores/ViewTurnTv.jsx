@@ -101,7 +101,7 @@ const ViewTurnTv = () => {
           {turns?.map((turno) => (
             <div key={turno.id}>
               <p>{turno.sequence}</p>
-              <p>{turno.servicio.nameButton}</p>
+              <p>{turno.user.name}</p>
             </div>
           ))}
         </ContTurnTv>

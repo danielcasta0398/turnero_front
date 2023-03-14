@@ -50,7 +50,6 @@ const Televisor = () => {
               text="Televisores"
               path="/dashboard/tv"
             />
-            <button onClick={handleClick}>Reproducir</button>
             <ContainerVolverMenu onClick={() => afterMenu()}>
               {volverMenuLogo}
               <p>Volver al menu</p>

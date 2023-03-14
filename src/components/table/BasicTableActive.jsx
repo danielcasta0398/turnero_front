@@ -49,7 +49,7 @@ const BasicTableActive = () => {
     dispatch(setDataTurn({ option: "onlyTurn", value: test }));
     dispatch(setDataTurn({ option: "viewModal", value: true }));
     console.log("llamo");
-    //dispatch(getTurnsById(id));
+    dispatch(getTurnsById(id));
   };
 
   return (
