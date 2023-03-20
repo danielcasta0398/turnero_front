@@ -8,7 +8,9 @@ import Sucess from "../../animations/Sucess";
 import { setDataTurn } from "../../store/slice/turns/turns.slice";
 import {
   asignedTurn,
+  deleteTurn,
   getTurnsAsigned,
+  getTurnsById,
 } from "../../store/slice/turns/turnsThunk";
 import ButtonPrimary from "../buttons/ButtonPrimary";
 import InputAutocompleteSearch from "../inputs/InputAutocompleteSearch";
@@ -60,12 +62,15 @@ const ModalAsignacion = () => {
 
   const llamar = () => {
     setIsStart(true);
+    dispatch(getTurnsById(onlyTurn[0].id));
     setTimerEndDate(Date.now() + 10000);
   };
 
   const cancel = () => {
     setIsStart(false);
     localforage.removeItem(`${onlyTurn[0].id}`);
+    dispatch(deleteTurn(onlyTurn[0].id));
+    dispatch(setDataTurn({ option: "viewModal", value: false }));
   };
 
   const asignar = () => {

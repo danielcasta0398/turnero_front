@@ -36,7 +36,16 @@ const BasicTableActive = () => {
     const socket = io(process.env.REACT_APP_URL_SOCKET);
 
     socket.on("turn", (data) => {
-      dispatch(getTurns());
+      console.log("data", data);
+      if (data === 4) {
+        console.log("entro");
+        return dispatch(getTurnsByUser("pendding"));
+      }
+
+      console.log("aca rambien");
+      if (role === 1) {
+        dispatch(getTurns("pendding"));
+      }
     });
 
     return () => {

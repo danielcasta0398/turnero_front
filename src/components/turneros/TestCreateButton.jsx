@@ -79,14 +79,15 @@ const TestCreateButton = () => {
   };
 
   const updateButton = () => {
-    const data = {
+    let data = {
       nameButton: textButton,
       userId: idUser,
       buttonNotification:
-        userNotiffication.length > 0
+        userNotiffication.length >= 0
           ? userNotiffication
           : onlyButtonInfo.button.users,
     };
+
     dispatch(updateButtons(onlyButtonInfo.button.id, data));
   };
 

@@ -74,3 +74,9 @@ export const asignedTurn = (data) => {
     await getDataWithToken(`turn/asignedturn/${data.turnId}`, "POST", data);
   };
 };
+
+export const deleteTurn = (id) => {
+  return async (dispatch) => {
+    await getDataWithToken(`turn/deleteturn/${id}`, "DELETE");
+  };
+};

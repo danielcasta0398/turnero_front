@@ -35,14 +35,11 @@ const Login = () => {
     if (event.name === "user") {
       console.log(event.value.length);
       if (event.value.length < 4 && event.value.length !== 0) {
-        console.log("Email incorrecto");
         setErrEmail(true);
       } else if (password.length >= 8 && event.value.length !== 0) {
-        console.log("entramos emial correcto");
         setErrEmail(false);
         return setIsDisabled(false);
       } else {
-        console.log("Email correcto");
         setErrEmail(false);
       }
     }

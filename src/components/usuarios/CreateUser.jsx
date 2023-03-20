@@ -23,6 +23,7 @@ const CreateUser = () => {
   const [stateTv, setStateTv] = useState("");
   const [isCaja, setIsCaja] = useState(false);
   const [televisores, setTelevisores] = useState([]);
+  const [errorUser, setErrorUser] = useState({ msg: "", state: false });
   const loading = useSelector((state) => state.loading);
   const message = useSelector((state) => state.message);
   const userData = useSelector((state) => state.users.userData);
@@ -77,15 +78,14 @@ const CreateUser = () => {
       setIsCaja(false);
     }
 
-    console.log(rol);
-
     if (
       nameUser &&
       user &&
       password &&
       repeatPassword === password &&
       rol &&
-      ((rol !== 2 && rol !== 5) || stateTv)
+      ((rol !== 2 && rol !== 5) || stateTv) &&
+      !user.includes(" ")
     ) {
       dispatch(setMessage(""));
       setDisabled(false);
@@ -109,6 +109,7 @@ const CreateUser = () => {
     );
   };
 
+  // Reinicia los estados de los inputs
   useEffect(() => {
     if (userData.status === "200") {
       setNameUser("");
@@ -119,6 +120,32 @@ const CreateUser = () => {
       setDisabled(true);
     }
   }, [userData]);
+
+  const userContainsSpace = (e) => {
+    if (e.target.value.length <= 3 && e.target.value.length > 0) {
+      return setErrorUser({
+        msg: "El usuario debe tener al menos 4 caracteres",
+        state: true,
+      });
+    } else {
+      setErrorUser({
+        msg: "",
+        state: false,
+      });
+    }
+
+    if (e.target.value.includes(" ")) {
+      setErrorUser({
+        msg: "El usuario no puede contener espacios",
+        state: true,
+      });
+    } else {
+      setErrorUser({
+        msg: "",
+        state: false,
+      });
+    }
+  };
 
   return (
     <>
@@ -148,10 +175,14 @@ const CreateUser = () => {
             value={user}
             onChange={(e) => {
               setUser(e.target.value);
+              userContainsSpace(e);
             }}
             textError={
-              (message.value === "username" || message.value === "existTwo") &&
-              message.message
+              errorUser.state
+                ? errorUser.msg
+                : (message.value === "username" ||
+                    message.value === "existTwo") &&
+                  message.message
             }
           />
           <InputLine

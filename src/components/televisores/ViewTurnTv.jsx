@@ -47,44 +47,6 @@ const ViewTurnTv = () => {
     setIsPlaying(false);
   };
 
-  /* const turnos = [
-    {
-      id: 1,
-      sequence: "URG - 001",
-      name: "Urgencias",
-    },
-    {
-      id: 2,
-      sequence: "URG - 002",
-      name: "Urgencias",
-    },
-    {
-      id: 3,
-      sequence: "URG - 003",
-      name: "Urgencias",
-    },
-    {
-      id: 4,
-      sequence: "URG - 004",
-      name: "Urgencias",
-    },
-    {
-      id: 5,
-      sequence: "URG - 005",
-      name: "Urgencias",
-    },
-    {
-      id: 6,
-      sequence: "URG - 006",
-      name: "Urgencias",
-    },
-    {
-      id: 7,
-      sequence: "URG - 007",
-      name: "Urgencias",
-    },
-  ];*/
-
   useEffect(() => {
     dispatch(getTurnsByTv());
   }, []);

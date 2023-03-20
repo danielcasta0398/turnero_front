@@ -17,6 +17,8 @@ const InputLine = ({ textName, value, textError, ...custom }) => {
         onFocus={handleFocus}
         onBlur={handleBlur}
         className={className}
+        autoComplete="off"
+        spellCheck="false"
       />
       <label>{textName}</label>
       {textError && (
