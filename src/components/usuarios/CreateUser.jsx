@@ -104,7 +104,7 @@ const CreateUser = () => {
         username: user,
         password,
         rol,
-        tvId: stateTv,
+        tvId: stateTv ? stateTv : null,
       })
     );
   };
