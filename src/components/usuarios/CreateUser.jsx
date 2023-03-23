@@ -61,9 +61,9 @@ const CreateUser = () => {
   };
 
   useEffect(() => {
-    if (password.length < 8 && password.length > 0) {
+    if (password.length < 4 && password.length > 0) {
       setErrorPassword({
-        message: "La contraseña debe tener al menos 8 caracteres",
+        message: "La contraseña debe tener al menos 4 caracteres",
         value: "password",
       });
     } else {
