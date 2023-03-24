@@ -36,7 +36,7 @@ const Login = () => {
       console.log(event.value.length);
       if (event.value.length < 4 && event.value.length !== 0) {
         setErrEmail(true);
-      } else if (password.length >= 8 && event.value.length !== 0) {
+      } else if (password.length >= 4 && event.value.length !== 0) {
         setErrEmail(false);
         return setIsDisabled(false);
       } else {
@@ -45,7 +45,7 @@ const Login = () => {
     }
 
     if (event.name === "password") {
-      if (event.value.length < 8 && event.value.length > 0) {
+      if (event.value.length < 4 && event.value.length > 0) {
         setErrPassword(true);
       } else {
         setErrPassword(false);
@@ -53,7 +53,7 @@ const Login = () => {
     }
 
     if (!errEmail) {
-      if (event.name === "password" && event.value.length >= 8) {
+      if (event.name === "password" && event.value.length >= 4) {
         setIsDisabled(false);
       } else {
         setIsDisabled(true);
@@ -109,7 +109,7 @@ const Login = () => {
                   }}
                   textError={
                     errPassword &&
-                    "La contraseña debe tener al menos 8 caracteres"
+                    "La contraseña debe tener al menos 4 caracteres"
                   }
                   nameInput="password"
                 />
