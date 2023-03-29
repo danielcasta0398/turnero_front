@@ -62,7 +62,7 @@ const Usuarios = () => {
 export default Usuarios;
 
 const MainContainerUser = styled.div`
-  height: 100%;
+  height: 90%;
   background-color: ${(props) => (props.isLoading ? "white" : " #F6F8FC")};
   display: flex;
   justify-content: center;

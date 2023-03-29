@@ -25,7 +25,7 @@ const ModalAsignacion = () => {
   const [count, setCount] = useState(0);
   const [options, setOptions] = useState([]);
   const [idUser, setIdUser] = useState(null);
-  const [name, setName] = useState(null);
+  const [name, setName] = useState(onlyTurn[0].nameUser);
   const [isSucess, setIsSucess] = useState(false);
 
   useEffect(() => {

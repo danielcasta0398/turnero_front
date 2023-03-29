@@ -30,6 +30,7 @@ const Router = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/verturnero/:id" element={<TakeTurn />} />
         <Route path="/verturnostv/:id" element={<ViewTurnTv />} />
+        {/* Rutas para navegar al apartado de Dashboard */}
         <Route element={<Dashboard />}>
           <Route path="/dashboard" element={<DashboarAdmin />} />
           <Route element={<Usuarios />}>
