@@ -156,3 +156,42 @@ export const iconPlus = (
     />
   </svg>
 );
+
+export const existSession = (
+  <svg
+    className=""
+    width="512"
+    height="512"
+    enableBackground="new 0 0 512 512"
+    version="1.1"
+    viewBox="0 0 682.67 682.67"
+  >
+    <defs>
+      <clipPath id="a">
+        <path d="M0 512h512V0H0Z" />
+      </clipPath>
+    </defs>
+    <g
+      transform="matrix(1.3333 0 0 -1.3333 0 682.67)"
+      clipPath="url(#a)"
+      fill="none"
+      stroke="#000"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeMiterlimit="10"
+      strokeWidth="40"
+    >
+      <path
+        className=""
+        transform="translate(341 140)"
+        d="m0 0v-20c0-55.229-44.771-100-100-100h-121c-55.229 0-100 44.771-100 100v272c0 55.229 44.771 100 100 100h121c55.229 0 100-44.771 100-100v-20"
+      />
+      <path
+        className=""
+        transform="translate(434 328)"
+        d="m0 0 46.289-45.461c15.614-15.567 15.614-40.807 0-56.373L0-148"
+      />
+      <path className="" transform="translate(197 256)" d="m0 0h216" />
+    </g>
+  </svg>
+);

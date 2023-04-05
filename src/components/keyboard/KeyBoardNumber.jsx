@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { setIsActiveModal } from "../../store/slice/isActiveModal.slice";
 import { setIsOpenModal } from "../../store/slice/isOpenModal.slice";
 import { setValueDocument } from "../../store/slice/valueDocument.slice";
 import { toggleFullScreen } from "../../utils/ScreenFull";
+import localforage from "localforage";
+import { useNavigate } from "react-router-dom";
 
 const KeyBoardNumber = () => {
   const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
@@ -14,6 +16,7 @@ const KeyBoardNumber = () => {
   const changeNumber = (number) => dispatch(setValueDocument(number));
   const setIsOpen = (isOpen) => dispatch(setIsOpenModal(isOpen));
   const cancelModal = (cancel) => dispatch(setIsActiveModal(cancel));
+  const navigate = useNavigate();
 
   const handleNumber = (number) => {
     clearTimeout(isActiveModal);
@@ -39,7 +42,12 @@ const KeyBoardNumber = () => {
 
       return toggleFullScreen(document);
     }
-  }, [valueDocument]);
+
+    if (valueDocument === "001021") {
+      localforage.clear();
+      navigate("/login");
+    }
+  }, [valueDocument, navigate, changeNumber]);
 
   return (
     <MaintContainerKeyboard>

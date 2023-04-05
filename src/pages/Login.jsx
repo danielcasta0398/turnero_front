@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import Loading from "../animations/Loading";
 import MsgError from "../components/alerts/MsgError";
 import ButtonBasic from "../components/buttons/ButtonBasic";
@@ -9,13 +8,13 @@ import {
   MaintContainer,
 } from "../components/containers/MainContainer";
 import InputBasic from "../components/inputs/InputBasic";
-import { setLoading } from "../store/slice/loadings";
-import { isActiveSession, loginUser } from "../store/slice/users";
-import { getDataStorage } from "../utils/getDataStorage";
+import logo from "../assets/logos/logo.png";
+import { loginUser } from "../store/slice/users";
+import styled from "styled-components";
+import { useCheckSession } from "../hooks/useCheckSession";
 
 const Login = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const loginState = useSelector((state) => state.login);
   const loading = useSelector((state) => state.loading);
   const [user, setUser] = useState("");
@@ -24,16 +23,17 @@ const Login = () => {
   const [errEmail, setErrEmail] = useState(false);
   const [errPassword, setErrPassword] = useState(false);
 
+  // Este Hook se ejecuta cuando se carga la pagina y verifica si hay una sesion activa
+  useCheckSession([], "/login");
+
+  // Este useEffect se ejecuta cuando le dan click al boton de iniciar sesion
   const onSubmit = async (e) => {
     e.preventDefault();
-    console.log(user);
     dispatch(loginUser({ username: user.toLowerCase(), password }));
   };
 
   const validateForm = (event) => {
-    console.log(password.length);
     if (event.name === "user") {
-      console.log(event.value.length);
       if (event.value.length < 4 && event.value.length !== 0) {
         setErrEmail(true);
       } else if (password.length >= 4 && event.value.length !== 0) {
@@ -67,8 +67,11 @@ const Login = () => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        flexDirection: "column",
+        gap: "30px",
       }}
     >
+      <ImgLogo src={logo} alt="logo" style={{}} />
       {
         <ContainerForm>
           {loading ? (
@@ -81,6 +84,7 @@ const Login = () => {
         contraseña e inténtalo de nuevo."
                 />
               )}
+
               <h1>Iniciar Sesion</h1>
               <form onSubmit={onSubmit} style={{ padding: "5px" }}>
                 <InputBasic
@@ -128,3 +132,7 @@ const Login = () => {
 };
 
 export default Login;
+
+const ImgLogo = styled.img`
+  width: 300px;
+`;

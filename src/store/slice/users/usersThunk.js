@@ -41,6 +41,11 @@ export const loginUser = (user) => (dispatch) => {
 
         localforage.setItem("user", res.data).then((value) => {
           window.location.href = "/dashboard";
+          localforage.on("removedItem", (key) => {
+            console.log(key);
+            if (key === "user") {
+            }
+          });
         });
       })
       .catch((err) => {

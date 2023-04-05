@@ -22,6 +22,7 @@ import RowTable from "../table/RowTable";
 import BasicTabs from "../tabs/BasicTabs";
 import TextToSpeech from "../TextToSpeech";
 import TestViewButtons from "./TestViewButtons";
+import { getDataStorage } from "../../utils/getDataStorage";
 
 const ViewTurnos = () => {
   const dispatch = useDispatch();

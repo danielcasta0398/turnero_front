@@ -6,10 +6,27 @@ import styled from "styled-components";
 
 import Navigation from "../components/nav/Navigation";
 import TestImpresion from "../components/TestImpresion";
+import { useCheckSession } from "../hooks/useCheckSession";
+import { io } from "socket.io-client";
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
+
+  // Este Hook se ejecuta cuando se carga la pagina y verifica si hay una sesion activa
+  useCheckSession([1], "/dashboard");
+
+  useEffect(() => {
+    const socket = io(process.env.REACT_APP_URL_SOCKET);
+
+    socket.on("test", (data) => {
+      console.log(data);
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
 
   useEffect(() => {
     localforage.getItem("user").then((value) => {

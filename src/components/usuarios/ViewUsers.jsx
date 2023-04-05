@@ -5,11 +5,15 @@ import Loading2 from "../../animations/Loading2";
 
 import { getAllUsers } from "../../store/slice/users";
 import { upperCase } from "../../utils/upperCase";
+import { useCheckSession } from "../../hooks/useCheckSession";
 
 const ViewUsers = () => {
   const dispatch = useDispatch();
   const users = useSelector((state) => state.users.resApi);
   const loading = useSelector((state) => state.loading);
+
+  // Este Hook se ejecuta cuando se carga la pagina y verifica si hay una sesion activa y si el usuario tiene permisos
+  useCheckSession([1], "/dashboard/usuarios");
 
   useEffect(() => {
     dispatch(getAllUsers());
