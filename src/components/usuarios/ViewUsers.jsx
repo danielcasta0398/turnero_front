@@ -40,7 +40,7 @@ const ViewUsers = () => {
 
   return (
     <ContainerPrincipalViewUser>
-      <ModalMui />
+      {/* <ModalMui /> */}
       <NewTable itemsHeader={itemsHeader} itemsBody={newData} />
     </ContainerPrincipalViewUser>
   );
