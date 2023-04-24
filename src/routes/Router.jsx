@@ -21,6 +21,7 @@ import Televisor from "../pages/Televisor";
 import CreateTv from "../components/televisores/CreateTv";
 import ViewTvs from "../components/televisores/ViewTvs";
 import ViewTurnTv from "../components/televisores/ViewTurnTv";
+import NewTable from "../components/table/NewTable";
 
 const Router = () => {
   return (
@@ -68,6 +69,8 @@ const Router = () => {
             <Route path="/dashboard/botones" element={<ViewButtons />} />
           </Route>
         </Route>
+        {/* Esta ruta es para testear componentes */}
+        <Route path="/test" element={<NewTable />} />
       </Routes>
     </BrowserRouter>
   );

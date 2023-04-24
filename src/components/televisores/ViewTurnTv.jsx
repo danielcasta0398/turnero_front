@@ -5,8 +5,11 @@ import logo from "../../assets/logos/logo.png";
 import { getTurnsByTv } from "../../store/slice/televisores/televisoresThunk";
 import TestVideo from "../TestVideo";
 import TestVideoHtml from "../TestVideoHtml";
+import { logOut } from "../../utils/logOutUtils";
+import { useNavigate } from "react-router-dom";
 
 const ViewTurnTv = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { turns } = useSelector((state) => state.televisores.turnsTv);
   let { turnSound } = useSelector((state) => state.televisores);
@@ -56,7 +59,7 @@ const ViewTurnTv = () => {
       {url && <audio src={url} autoPlay onPlay={inicio} onEnded={termino} />}
 
       <ContLogo>
-        <img src={logo} alt="logo" />
+        <img src={logo} alt="logo" onDoubleClick={() => logOut(navigate)} />
       </ContLogo>
       <ContBodyTurnTv>
         <ContTurnTv>

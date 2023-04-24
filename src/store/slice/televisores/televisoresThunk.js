@@ -32,6 +32,14 @@ export const getTurnsByTv = (id) => async (dispatch, getState) => {
   );
 
   socket.on(`tv${tvId}`, async (data) => {
+    if (!data) {
+      const turns = await getDataWithToken(
+        `turn/getallturnsbyidtvs/${tvId}`,
+        "GET"
+      );
+      return dispatch(setDataTv({ option: "turnsTv", value: turns }));
+    }
+
     const state = getState();
     let {
       televisores: { turnSound },

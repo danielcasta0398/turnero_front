@@ -6,6 +6,12 @@ import Loading2 from "../../animations/Loading2";
 import { getAllUsers } from "../../store/slice/users";
 import { upperCase } from "../../utils/upperCase";
 import { useCheckSession } from "../../hooks/useCheckSession";
+import NewTable from "../table/NewTable";
+import Opciones from "../ComponenteOpciones/Opciones";
+import Modal from "../modal/Modal";
+import ModalMui from "../modal/ModalMui";
+
+const itemsHeader = ["Usuario", "Nombre", "Rol", "Opciones"];
 
 const ViewUsers = () => {
   const dispatch = useDispatch();
@@ -19,38 +25,23 @@ const ViewUsers = () => {
     dispatch(getAllUsers());
   }, [dispatch]);
 
+  const newData = users?.map((user) => {
+    return [
+      user.username,
+      user.name,
+      upperCase(user.role.nombreRol),
+      <Opciones tv={user.Televisor?.name ? user.Televisor?.name : ""} />,
+    ];
+  });
+
   if (loading) {
     return <Loading2 />;
   }
 
   return (
     <ContainerPrincipalViewUser>
-      <ContainerNameTable>
-        <p style={{ width: "30%" }}>Usuario</p>
-        <p style={{ width: "25%" }}>Nombre</p>
-        <p>Rol</p>
-      </ContainerNameTable>
-
-      <ContAllUsersTable>
-        {users?.map((user) => {
-          return (
-            <ContainerOnlyUser key={user.id}>
-              <ContainerImgUser>
-                <div>{upperCase(user.username[0])}</div>
-                <p>{user.username}</p>
-              </ContainerImgUser>
-              <p
-                style={{ display: "flex", alignItems: "center", width: "25%" }}
-              >
-                {user.name}
-              </p>
-              <p style={{ display: "flex", alignItems: "center" }}>
-                {user.role?.nombreRol}
-              </p>
-            </ContainerOnlyUser>
-          );
-        })}
-      </ContAllUsersTable>
+      <ModalMui />
+      <NewTable itemsHeader={itemsHeader} itemsBody={newData} />
     </ContainerPrincipalViewUser>
   );
 };

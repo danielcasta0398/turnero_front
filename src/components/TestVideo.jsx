@@ -23,6 +23,7 @@ const TestVideo = () => {
     controls: true,
     responsive: true,
     fluid: true,
+    muted: true,
     sources: [
       {
         src: "https://firebasestorage.googleapis.com/v0/b/wifisalesboost-a8a1a.appspot.com/o/connectingthedots%2Fistockphoto-1400995224-640_adpp_is.mp4?alt=media&token=1b547ebb-d699-4b74-aa53-64a1769c95dc",
