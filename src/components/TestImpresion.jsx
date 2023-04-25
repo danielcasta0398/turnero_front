@@ -4,13 +4,24 @@ import { useReactToPrint } from "react-to-print";
 import styled from "styled-components";
 import logo from "../assets/logos/logo.png";
 
+function formatDate(date) {
+  const day = date.getDate().toString().padStart(2, "0");
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  const year = date.getFullYear();
+  const hour = date.getHours().toString().padStart(2, "0");
+  const minute = date.getMinutes().toString().padStart(2, "0");
+  const second = date.getSeconds().toString().padStart(2, "0");
+
+  return `${day}/${month}/${year} ${hour}:${minute}:${second}`;
+}
+
 export default function TestImpresion(props) {
   const { isPrint, infoTurn } = useSelector((state) => state.turn);
   const componentRef = useRef();
 
   const ComponentToPrint = forwardRef((props, ref) => {
     const now = new Date();
-    const fechaHora = now.toLocaleString();
+    const fechaHora = formatDate(now);
 
     return (
       <Div ref={ref}>
@@ -53,14 +64,12 @@ const Div = styled.div`
   div {
     width: 100%;
     display: flex;
-    justify-content: space-between;
 
     p:nth-child(1) {
       text-align: start;
     }
 
     p:nth-child(2) {
-      text-align: end;
     }
   }
 
@@ -92,93 +101,3 @@ const Div = styled.div`
     margin: 0;
   }
 `;
-
-// import React, { forwardRef, useRef } from "react";
-// import { useReactToPrint } from "react-to-print";
-// import styled from "styled-components";
-// import logo from "../assets/logos/logo.png";
-// import jsPDF from "jspdf";
-
-// const ComponentToPrint = forwardRef((props, ref) => (
-//   <Div ref={ref}>
-//     <img src={logo} alt="image" width={"200px"} />
-//     <h1>URGENCIAS</h1>
-//     <h2>URG-001</h2>
-//   </Div>
-// ));
-
-// const generatePDF = () => {
-//   const doc = new jsPDF({
-//     orientation: "portrait",
-//     unit: "mm",
-//     format: [72, 50], // ajusta el ancho y la altura del documento según tu papel
-//   });
-
-//   doc.addImage(logo, "PNG", 10, 10, 50, 20); // agrega la imagen de tu logo en las coordenadas (10, 10) con un tamaño de 20 x 20 mm
-//   doc.setFontSize(20);
-//   doc.text("URGENCIAS", 20, 50); // agrega el texto "URGENCIAS" en las coordenadas (40, 20)
-//   doc.setFontSize(16);
-//   doc.text("URG-001", 20, 70); // agrega el texto "URG-001" en las coordenadas (40, 30)
-
-//   doc.autoPrint();
-//   doc.output("dataurlnewwindow");
-// };
-
-// export default function TestImpresion(props) {
-//   const componentRef = useRef();
-//   const handlePrint = useReactToPrint({
-//     content: () => componentRef.current,
-//   });
-
-//   return (
-//     <div>
-//       <ComponentToPrint ref={componentRef} />
-//       <button onClick={generatePDF}>Print</button>
-//     </div>
-//   );
-// }
-
-// const Div = styled.div`
-//   display: flex;
-//   flex-direction: column;
-//   align-items: center;
-//   height: 100px;
-//   overflow: auto;
-
-//   h1 {
-//     font-size: 2em;
-//   }
-
-//   @page {
-//     size: 72mm 100mm;
-//     margin: 0;
-//   }
-// `;
-
-// /*import React, { useRef } from "react";
-// import logo from "../assets/logos/logo.png";
-
-// const TestImpresion = ({ content }) => {
-//   const iframeRef = useRef();
-
-//   const handlePrint = () => {
-//     const iframe = iframeRef.current;
-//     const iframeWindow = iframe.contentWindow;
-
-//     iframeWindow.document.body.innerHTML = `<div>
-//        <img src=${logo} alt="logo" />
-//       <h1>URGENCIAS</h1>
-//       <h2>URG-001</h2>
-//     </div>`;
-//     iframeWindow.print();
-//   };
-
-//   return (
-//     <>
-//       <iframe title="print-frame" ref={iframeRef} style={{ display: "none" }} />
-//       <button onClick={handlePrint}>Imprimir</button>
-//     </>
-//   );
-// };
-
-// export default TestImpresion;*/
