@@ -9,6 +9,7 @@ import { setDataTurn } from "../../store/slice/turns/turns.slice";
 import {
   asignedTurn,
   deleteTurn,
+  endTurn,
   getTurnsAsigned,
   getTurnsById,
 } from "../../store/slice/turns/turnsThunk";
@@ -73,6 +74,11 @@ const ModalAsignacion = () => {
     dispatch(setDataTurn({ option: "viewModal", value: false }));
   };
 
+  const end = () => {
+    localforage.removeItem(`${onlyTurn[0].id}`);
+    dispatch(endTurn(onlyTurn[0].id));
+  };
+
   const asignar = () => {
     if (!name || !idUser) {
       return alert("El nombre y el usuario son obligatorios");
@@ -127,6 +133,9 @@ const ModalAsignacion = () => {
               }}
             />
           </ContInputs>
+          <div>
+            <ButtonPrimary onClick={end}>Finalizar Turno</ButtonPrimary>
+          </div>
           <ContButtons>
             {(count < 3 || isStart) && (
               <ButtonPrimary

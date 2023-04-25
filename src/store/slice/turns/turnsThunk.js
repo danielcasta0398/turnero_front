@@ -80,3 +80,11 @@ export const deleteTurn = (id) => {
     await getDataWithToken(`turn/deleteturn/${id}`, "DELETE");
   };
 };
+
+export const endTurn = (id) => {
+  console.log(id);
+  return async (dispatch) => {
+    await getDataWithToken(`turn/endturn/${id}`, "PATCH");
+    dispatch(setDataTurn({ option: "viewModal", value: false }));
+  };
+};
