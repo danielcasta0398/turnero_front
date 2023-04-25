@@ -7,6 +7,7 @@ import TestVideo from "../TestVideo";
 import TestVideoHtml from "../TestVideoHtml";
 import { logOut } from "../../utils/logOutUtils";
 import { useNavigate } from "react-router-dom";
+import ButtonPrimary from "../buttons/ButtonPrimary";
 
 const ViewTurnTv = () => {
   const navigate = useNavigate();
@@ -59,8 +60,12 @@ const ViewTurnTv = () => {
       {url && <audio src={url} autoPlay onPlay={inicio} onEnded={termino} />}
 
       <ContLogo>
-        <img src={logo} alt="logo" onDoubleClick={() => logOut(navigate)} />
+        <img src={logo} alt="logo" />
+        <ButtonPrimary onClick={() => logOut(navigate)}>
+          Cerrar Sesion
+        </ButtonPrimary>
       </ContLogo>
+
       <ContBodyTurnTv>
         <ContTurnTv>
           {turns?.map((turno) => (
