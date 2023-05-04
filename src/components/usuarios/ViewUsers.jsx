@@ -30,7 +30,10 @@ const ViewUsers = () => {
       user.username,
       user.name,
       upperCase(user.role.nombreRol),
-      <Opciones tv={user.Televisor?.name ? user.Televisor?.name : ""} />,
+      <Opciones
+        tv={user.Televisor?.name ? user.Televisor?.name : ""}
+        id={user.id}
+      />,
     ];
   });
 
@@ -40,7 +43,6 @@ const ViewUsers = () => {
 
   return (
     <ContainerPrincipalViewUser>
-      {/* <ModalMui /> */}
       <NewTable itemsHeader={itemsHeader} itemsBody={newData} />
     </ContainerPrincipalViewUser>
   );

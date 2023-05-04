@@ -1,14 +1,40 @@
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
-import { deleteIcon, editIcon, iconTv } from "../../assets/svg/svgs";
+import {
+  deleteIcon,
+  editIcon,
+  iconTv,
+  passwordIcon,
+} from "../../assets/svg/svgs";
+import ModalMui from "../modal/ModalMui";
+import { useDispatch } from "react-redux";
+import { setState } from "../../store/slice/states";
+import { TextField } from "@mui/material";
+import ButtonPrimary from "../buttons/ButtonPrimary";
+import ComponentChangePassword from "../usuarios/ComponentChangePassword";
+import ComponentEditProfile from "../usuarios/ComponentEditProfile";
 
-const Opciones = ({ tv }) => {
+const Opciones = ({ tv, id }) => {
+  const dispatch = useDispatch();
   const [showOptions, setShowOptions] = useState(false);
+  const [editPasswordModalActive, setEditPasswordModalActive] = useState(false);
+  const [editProfileModalActive, setEditProfileModalActive] = useState(false);
   const optionsRef = useRef(null);
   const buttonRef = useRef(null);
 
   const toggleOptions = () => {
     setShowOptions((prevShowOptions) => !prevShowOptions);
+  };
+
+  const changePassword = () => {
+    console.log("changePassword");
+    setEditPasswordModalActive(true);
+    dispatch(setState({ option: "isActiveModal", value: true }));
+  };
+
+  const editProfile = () => {
+    setEditProfileModalActive(true);
+    dispatch(setState({ option: "isActiveModal", value: true }));
   };
 
   useEffect(() => {
@@ -31,6 +57,16 @@ const Opciones = ({ tv }) => {
 
   return (
     <div style={{ position: "relative" }}>
+      <ModalMui
+        isActive={editPasswordModalActive}
+        onClose={() => setEditPasswordModalActive(false)}
+        render={<ComponentChangePassword id={id} />}
+      />
+      <ModalMui
+        isActive={editProfileModalActive}
+        onClose={() => setEditProfileModalActive(false)}
+        render={<ComponentEditProfile id={id} />}
+      />
       <StyledButton ref={buttonRef} onClick={toggleOptions}>
         Opciones {showOptions && <Viñeta />}
       </StyledButton>
@@ -55,8 +91,11 @@ const Opciones = ({ tv }) => {
             )}
           </RowOptions>
         )}
-        <RowOptions style={{ marginTop: tv && "35px" }}>
+        <RowOptions onClick={editProfile} style={{ marginTop: tv && "35px" }}>
           {editIcon} <p>Editar</p>
+        </RowOptions>
+        <RowOptions onClick={changePassword} style={{}}>
+          {passwordIcon} <p>Nueva Contraseña</p>
         </RowOptions>
         <RowOptions colorPath={"rgb(255, 86, 48)"} color="rgb(255, 86, 48)">
           {deleteIcon} <p>Eliminar</p>
@@ -110,9 +149,9 @@ const Viñeta = styled.span`
 
 const ContOptions = styled.div`
   position: absolute;
-  width: 211px;
+  width: 220px;
   top: 38px;
-  left: -80px;
+  left: -120px;
   border-radius: 10px;
   padding: 5px;
   background-color: #fff;
@@ -127,8 +166,8 @@ const ContOptions = styled.div`
 const RowOptions = styled.div`
   width: 100%;
   display: flex;
-  justify-content: space-between;
-  gap: 10px;
+  justify-content: flex-start;
+  gap: 20px;
   cursor: pointer;
   padding: 5px 10px;
   border-radius: 10px;
@@ -138,7 +177,7 @@ const RowOptions = styled.div`
   }
 
   & > p {
-    width: 60%;
+    width: 71%;
     text-align: left;
     color: ${(props) => (props.color ? props.color : "var(--color-primary)")};
   }

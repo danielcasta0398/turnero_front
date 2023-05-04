@@ -4,6 +4,8 @@ import { getDataStorage } from "./getDataStorage";
 export const getDataWithToken = async (endpoint, method, data) => {
   const { token } = await getDataStorage("user");
 
+  console.log(data);
+
   try {
     const resApi = await axios({
       headers: {

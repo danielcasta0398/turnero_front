@@ -12,6 +12,7 @@ import { turneroSlice } from "./slice/turneros/turnero.slice";
 import { consultorioSlice } from "./slice/consultorios";
 import { turnSlice } from "./slice/turns/turns.slice";
 import { televisorSlice } from "./slice/televisores/televisores.slice";
+import { stateSlice } from "./slice/states";
 
 export default configureStore({
   reducer: {
@@ -28,5 +29,6 @@ export default configureStore({
     consultorio: consultorioSlice.reducer,
     turn: turnSlice.reducer,
     televisores: televisorSlice.reducer,
+    states: stateSlice.reducer,
   },
 });
