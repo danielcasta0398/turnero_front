@@ -149,7 +149,7 @@ const Viñeta = styled.span`
 
 const ContOptions = styled.div`
   position: absolute;
-  width: 220px;
+  width: 250px;
   top: 38px;
   left: -120px;
   border-radius: 10px;
