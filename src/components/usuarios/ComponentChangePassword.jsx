@@ -15,6 +15,12 @@ const ComponentChangePassword = ({ id }) => {
   const [noMatch, setNoMatch] = useState(false);
   const { isLoadingOptions } = useSelector((state) => state.states);
 
+  const closeModal = () => {
+    dispatch(setState({ option: "isLoadingOptions", value: false }));
+    dispatch(setState({ option: "activeModalUserId", value: null }));
+    dispatch(setState({ option: "activeModalType", value: null }));
+  };
+
   const changePass = async (e) => {
     e.preventDefault();
     const password = e.target.password.value;
@@ -31,14 +37,10 @@ const ComponentChangePassword = ({ id }) => {
         password,
       });
 
+      setSucess(true);
       setTimeout(() => {
-        setSucess(true);
-      }, 1000);
-
-      setTimeout(() => {
+        closeModal();
         setSucess(false);
-        dispatch(setState({ option: "isLoadingOptions", value: false }));
-        dispatch(setState({ option: "isActiveModal", value: false }));
       }, 4000);
 
       console.log(data);

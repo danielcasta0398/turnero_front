@@ -7,7 +7,7 @@ import {
   passwordIcon,
 } from "../../assets/svg/svgs";
 import ModalMui from "../modal/ModalMui";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setState } from "../../store/slice/states";
 import { TextField } from "@mui/material";
 import ButtonPrimary from "../buttons/ButtonPrimary";
@@ -17,10 +17,13 @@ import ComponentEditProfile from "../usuarios/ComponentEditProfile";
 const Opciones = ({ tv, id }) => {
   const dispatch = useDispatch();
   const [showOptions, setShowOptions] = useState(false);
-  const [editPasswordModalActive, setEditPasswordModalActive] = useState(false);
-  const [editProfileModalActive, setEditProfileModalActive] = useState(false);
   const optionsRef = useRef(null);
   const buttonRef = useRef(null);
+
+  const activeModalUserId = useSelector(
+    (state) => state.states.activeModalUserId
+  );
+  const activeModalType = useSelector((state) => state.states.activeModalType);
 
   const toggleOptions = () => {
     setShowOptions((prevShowOptions) => !prevShowOptions);
@@ -28,13 +31,18 @@ const Opciones = ({ tv, id }) => {
 
   const changePassword = () => {
     console.log("changePassword");
-    setEditPasswordModalActive(true);
-    dispatch(setState({ option: "isActiveModal", value: true }));
+    dispatch(setState({ option: "activeModalUserId", value: id }));
+    dispatch(setState({ option: "activeModalType", value: "editPassword" }));
   };
 
   const editProfile = () => {
-    setEditProfileModalActive(true);
-    dispatch(setState({ option: "isActiveModal", value: true }));
+    dispatch(setState({ option: "activeModalUserId", value: id }));
+    dispatch(setState({ option: "activeModalType", value: "editProfile" }));
+  };
+
+  const closeModal = () => {
+    dispatch(setState({ option: "activeModalUserId", value: null }));
+    dispatch(setState({ option: "activeModalType", value: null }));
   };
 
   useEffect(() => {
@@ -58,13 +66,15 @@ const Opciones = ({ tv, id }) => {
   return (
     <div style={{ position: "relative" }}>
       <ModalMui
-        isActive={editPasswordModalActive}
-        onClose={() => setEditPasswordModalActive(false)}
+        isActive={
+          activeModalUserId === id && activeModalType === "editPassword"
+        }
+        onClose={closeModal}
         render={<ComponentChangePassword id={id} />}
       />
       <ModalMui
-        isActive={editProfileModalActive}
-        onClose={() => setEditProfileModalActive(false)}
+        isActive={activeModalUserId === id && activeModalType === "editProfile"}
+        onClose={closeModal}
         render={<ComponentEditProfile id={id} />}
       />
       <StyledButton ref={buttonRef} onClick={toggleOptions}>
