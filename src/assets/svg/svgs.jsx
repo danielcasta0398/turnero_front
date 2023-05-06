@@ -185,13 +185,20 @@ export const existSession = (
         className=""
         transform="translate(341 140)"
         d="m0 0v-20c0-55.229-44.771-100-100-100h-121c-55.229 0-100 44.771-100 100v272c0 55.229 44.771 100 100 100h121c55.229 0 100-44.771 100-100v-20"
+        stroke="black"
       />
       <path
         className=""
         transform="translate(434 328)"
         d="m0 0 46.289-45.461c15.614-15.567 15.614-40.807 0-56.373L0-148"
+        stroke="black"
       />
-      <path className="" transform="translate(197 256)" d="m0 0h216" />
+      <path
+        className=""
+        transform="translate(197 256)"
+        d="m0 0h216"
+        stroke="black"
+      />
     </g>
   </svg>
 );

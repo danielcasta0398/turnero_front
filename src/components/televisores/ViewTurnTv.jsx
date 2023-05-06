@@ -8,6 +8,8 @@ import TestVideoHtml from "../TestVideoHtml";
 import { logOut } from "../../utils/logOutUtils";
 import { useNavigate } from "react-router-dom";
 import ButtonPrimary from "../buttons/ButtonPrimary";
+import { existSession } from "../../assets/svg/svgs";
+import localforage from "localforage";
 
 const ViewTurnTv = () => {
   const navigate = useNavigate();
@@ -19,13 +21,26 @@ const ViewTurnTv = () => {
   const [audiosPending, setAudiosPending] = React.useState([]);
   const [turnDataCall, setTurnDataCall] = React.useState("");
 
+  //Verificar si existe usuario logeado
+
+  useEffect(() => {
+    const existUser = async () => {
+      const user = await localforage.getItem("user");
+
+      if (!user) {
+        return navigate("/login");
+      }
+    };
+
+    existUser();
+  }, []);
+
   const inicio = () => {
     console.log("inicio");
     setIsPlaying(true);
   };
 
   useEffect(() => {
-    console.log(turnSound);
     if (turnSound && !isPlaying && turnSound.url) {
       console.log("hay sonido");
       console.log(turnSound.url);
@@ -58,12 +73,12 @@ const ViewTurnTv = () => {
   return (
     <MainContainerTurnTv>
       {url && <audio src={url} autoPlay onPlay={inicio} onEnded={termino} />}
+      <ContIconExit onClick={() => logOut(navigate)}>
+        {existSession}
+      </ContIconExit>
 
       <ContLogo>
         <img src={logo} alt="logo" />
-        <ButtonPrimary onClick={() => logOut(navigate)}>
-          Cerrar Sesion
-        </ButtonPrimary>
       </ContLogo>
 
       <ContBodyTurnTv>
@@ -192,5 +207,22 @@ const ContTurnTvLeft = styled.div`
   p:nth-child(1) {
     font-size: 2.5em;
     width: 45%;
+  }
+`;
+
+const ContIconExit = styled.div`
+  position: absolute;
+  right: 0;
+  bottom: 0;
+
+  svg {
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    margin: 20px;
+
+    path {
+      stroke: #cecece;
+    }
   }
 `;
