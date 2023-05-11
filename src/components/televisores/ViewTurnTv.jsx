@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import ButtonPrimary from "../buttons/ButtonPrimary";
 import { existSession } from "../../assets/svg/svgs";
 import localforage from "localforage";
+import img1 from "../../assets/publicidad/img-1.jpg";
 
 const ViewTurnTv = () => {
   const navigate = useNavigate();
@@ -91,7 +92,17 @@ const ViewTurnTv = () => {
           ))}
         </ContTurnTv>
         <ContVideo>
-          <TestVideo />
+          <img
+            src={img1}
+            alt=""
+            style={{
+              position: "absolute",
+              width: "50%",
+              height: "50%",
+              top: 0,
+              right: 0,
+            }}
+          />
           {turnDataCall && (
             <ContOnlyTurn>
               <div id="turno">
@@ -140,16 +151,17 @@ const ContVideo = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-end;
 `;
 
 const ContOnlyTurn = styled.div`
-  height: 50%;
+  height: 80%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
-  width: 80%;
+  width: 90%;
+  margin-right: 20px;
 
   #turno {
     animation: zoom 2s infinite;
