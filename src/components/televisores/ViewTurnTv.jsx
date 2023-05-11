@@ -155,7 +155,7 @@ const ContVideo = styled.div`
 `;
 
 const ContOnlyTurn = styled.div`
-  height: 80%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -194,6 +194,8 @@ const ContOnlyTurn = styled.div`
   p {
     font-size: 3em;
     font-weight: 700;
+    width: 75%;
+    text-align: center;
   }
 `;
 
