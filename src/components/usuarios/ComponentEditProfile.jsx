@@ -14,8 +14,6 @@ const ComponentEditProfile = ({ id }) => {
   const [name, setName] = useState(""); // Estado para el valor del TextField 'Nombre'
   const { stateEditUser, success } = useSelector((state) => state.states);
 
-  console.log(success);
-
   useEffect(() => {
     getDataWithToken(`users/user/${id}`, "GET").then((res) => {
       setUsername(res.user.username); // Actualizamos el estado del username cuando los datos estén disponibles
