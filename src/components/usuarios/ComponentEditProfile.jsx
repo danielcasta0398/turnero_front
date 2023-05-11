@@ -10,7 +10,6 @@ import Sucess from "../../animations/Sucess";
 const ComponentEditProfile = ({ id }) => {
   const dispatch = useDispatch();
 
-  const [user, setUser] = useState({});
   const [username, setUsername] = useState(""); // Estado para el valor del TextField 'Usuario'
   const [name, setName] = useState(""); // Estado para el valor del TextField 'Nombre'
   const { stateEditUser, success } = useSelector((state) => state.states);
@@ -19,11 +18,10 @@ const ComponentEditProfile = ({ id }) => {
 
   useEffect(() => {
     getDataWithToken(`users/user/${id}`, "GET").then((res) => {
-      setUser(res.user);
       setUsername(res.user.username); // Actualizamos el estado del username cuando los datos estén disponibles
       setName(res.user.name); // Actualizamos el estado del nombre cuando los datos estén disponibles
     });
-  }, []);
+  }, [id]);
 
   const editProfile = async (e) => {
     e.preventDefault();

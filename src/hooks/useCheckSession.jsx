@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getDataStorage } from "../utils/getDataStorage";
 
@@ -35,6 +34,4 @@ export const useCheckSession = async (Ids, path, redirectTo = null) => {
       redirectTo ? navigate(redirectTo) : navigate("/login");
     }
   }
-
-  console.log(currentPath);
 };

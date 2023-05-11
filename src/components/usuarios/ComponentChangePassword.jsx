@@ -33,7 +33,7 @@ const ComponentChangePassword = ({ id }) => {
     dispatch(setState({ option: "isLoadingOptions", value: true }));
 
     try {
-      const data = await getDataWithToken(`users/changepassword/${id}`, "PUT", {
+      await getDataWithToken(`users/changepassword/${id}`, "PUT", {
         password,
       });
 

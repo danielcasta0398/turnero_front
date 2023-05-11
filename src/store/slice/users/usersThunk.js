@@ -130,6 +130,7 @@ export const editUser = (id, data) => {
       setTimeout(() => {
         dispatch(setState({ option: "activeModalUserId", value: null }));
         dispatch(setState({ option: "activeModalType", value: null }));
+        dispatch(setState({ option: "success", value: false }));
         dispatch(getAllUsers());
       }, 3000);
     } catch (error) {}
