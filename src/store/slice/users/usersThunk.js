@@ -5,6 +5,7 @@ import { setLoading } from "../loadings/loading.slice";
 import { msgError } from "../login.slice";
 import { setMessage } from "../messages";
 import { setMsgErrorUser, setRoles, setUser, setUserApi } from "./user.slice";
+import { setState } from "../states";
 
 //Manejador de login y redireccion dependiendo del rol
 export const loginUser = (user) => (dispatch) => {
@@ -106,6 +107,32 @@ export const createUser = (data) => {
     }, 3000);
 
     console.log(resData);
+  };
+};
+
+export const editUser = (id, data) => {
+  return async (dispatch) => {
+    try {
+      const res = await getDataWithToken(`users/edit/${id}`, "PATCH", data);
+
+      if (res.code === 1002) {
+        return dispatch(
+          setState({
+            option: "stateEditUser",
+            value: {
+              state: true,
+              message: res.message,
+            },
+          })
+        );
+      }
+      dispatch(setState({ option: "success", value: true }));
+      setTimeout(() => {
+        dispatch(setState({ option: "activeModalUserId", value: null }));
+        dispatch(setState({ option: "activeModalType", value: null }));
+        dispatch(getAllUsers());
+      }, 3000);
+    } catch (error) {}
   };
 };
 

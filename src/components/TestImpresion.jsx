@@ -2,7 +2,7 @@ import React, { forwardRef, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { useReactToPrint } from "react-to-print";
 import styled from "styled-components";
-import logo from "../assets/logos/logo.png";
+import logo from "../assets/logos/logo-principal.png";
 
 function formatDate(date) {
   const day = date.getDate().toString().padStart(2, "0");
@@ -25,7 +25,7 @@ export default function TestImpresion(props) {
 
     return (
       <Div ref={ref}>
-        <img src={logo} alt="image" width={"120px"} height="100px" />
+        <img src={logo} alt="image" width={"80px"} height="10px" />
         <h2>{infoTurn?.nameButton.toUpperCase()}</h2>
         <h1>{infoTurn?.sequence}</h1>
         <div>
@@ -79,6 +79,7 @@ const Div = styled.div`
   }
 
   img {
+    width: 80mm;
     height: 10mm;
   }
 
@@ -91,13 +92,10 @@ const Div = styled.div`
   }
 
   @media print {
-    @page {
-      margin: 5mm;
-    }
   }
 
   @page {
-    size: 72mm 40mm;
+    size: 77mm 45mm;
     margin: 0;
   }
 `;

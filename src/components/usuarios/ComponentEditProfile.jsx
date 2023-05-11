@@ -1,13 +1,21 @@
-import { TextField } from "@mui/material";
+import { Alert, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import ButtonPrimary from "../buttons/ButtonPrimary";
 import styled from "styled-components";
 import { getDataWithToken } from "../../utils/getDataToken";
+import { useDispatch, useSelector } from "react-redux";
+import { editUser } from "../../store/slice/users/usersThunk";
+import Sucess from "../../animations/Sucess";
 
 const ComponentEditProfile = ({ id }) => {
+  const dispatch = useDispatch();
+
   const [user, setUser] = useState({});
   const [username, setUsername] = useState(""); // Estado para el valor del TextField 'Usuario'
   const [name, setName] = useState(""); // Estado para el valor del TextField 'Nombre'
+  const { stateEditUser, success } = useSelector((state) => state.states);
+
+  console.log(success);
 
   useEffect(() => {
     getDataWithToken(`users/user/${id}`, "GET").then((res) => {
@@ -17,44 +25,58 @@ const ComponentEditProfile = ({ id }) => {
     });
   }, []);
 
-  const changePass = (e) => {
+  const editProfile = async (e) => {
     e.preventDefault();
-
-    const password = e.target.password.value;
-    const repeatPassword = e.target.repeatPassword.value;
-
-    if (password !== repeatPassword) {
-      console.log("No Coinciden");
-      return "No coinciden";
-    }
+    dispatch(editUser(id, { username, name }));
   };
 
   return (
-    <MainChangePassword onSubmit={changePass}>
-      <h2>Editar Usuario</h2>
-      <TextField
-        label="Usuario"
-        type="text"
-        name="user"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        variant="outlined"
-      />
-      <TextField
-        label="Nombre"
-        type="text"
-        name="name"
-        value={name}
-        onChange={(e) => setName(e.target.value)} // Corrección: actualiza el estado de 'name'
-        variant="outlined"
-      />
-      <ButtonPrimary
-        type="submit"
-        style={{ borderRadius: "5px", padding: "10px 0" }}
-      >
-        Cambiar Datos
-      </ButtonPrimary>
-    </MainChangePassword>
+    <>
+      {success ? (
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Sucess />
+          <h2 style={{ textAlign: "center" }}>
+            Los cambios se han realizado con éxito
+          </h2>
+        </div>
+      ) : (
+        <MainChangePassword onSubmit={editProfile}>
+          {stateEditUser.state && (
+            <Alert severity="error">{stateEditUser.message}</Alert>
+          )}
+          <h2>Editar Usuario</h2>
+          <TextField
+            label="Usuario"
+            type="text"
+            name="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            variant="outlined"
+          />
+          <TextField
+            label="Nombre"
+            type="text"
+            name="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)} // Corrección: actualiza el estado de 'name'
+            variant="outlined"
+          />
+          <ButtonPrimary
+            type="submit"
+            style={{ borderRadius: "5px", padding: "10px 0" }}
+          >
+            Cambiar Datos
+          </ButtonPrimary>
+        </MainChangePassword>
+      )}
+    </>
   );
 };
 

@@ -6,6 +6,11 @@ export const stateSlice = createSlice({
     activeModalUserId: null,
     activeModalType: null,
     isLoadingOptions: false,
+    stateEditUser: {
+      state: false,
+      message: "",
+    },
+    success: false,
   },
   reducers: {
     setState: (state, action) => {

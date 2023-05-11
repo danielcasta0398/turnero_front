@@ -42,8 +42,6 @@ const ComponentChangePassword = ({ id }) => {
         closeModal();
         setSucess(false);
       }, 4000);
-
-      console.log(data);
     } catch (error) {}
   };
 
