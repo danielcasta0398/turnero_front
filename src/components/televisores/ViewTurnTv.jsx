@@ -155,7 +155,7 @@ const ContVideo = styled.div`
 `;
 
 const ContOnlyTurn = styled.div`
-  height: 100%;
+  height: 90%;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
