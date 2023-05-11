@@ -203,21 +203,22 @@ const ContTurnTvLeft = styled.div`
   align-items: center;
   padding: 0 20px;
   width: 90%;
-  height: 10%;
+  height: 15%;
   background-color: var(--color-primary);
   border-radius: 20px;
   margin-bottom: 20px;
 
   p {
     color: white;
-    font-size: 2em;
+    font-size: 2.5em;
     font-weight: 700;
     width: 55%;
     text-align: center;
+    line-height: 45px;
   }
 
   p:nth-child(1) {
-    font-size: 2.5em;
+    font-size: 3.5em;
     width: 45%;
   }
 `;
