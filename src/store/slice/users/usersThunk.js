@@ -191,8 +191,6 @@ export const getUsersByRol = (rolId) => {
         "GET"
       );
 
-      console.log(resData);
-
       if (resData.code && resData.code === 1001) {
         dispatch(setLoading(false));
         return dispatch(

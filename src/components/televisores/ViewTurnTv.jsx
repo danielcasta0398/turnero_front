@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import logo from "../../assets/logos/logo.png";
@@ -11,6 +11,7 @@ import ButtonPrimary from "../buttons/ButtonPrimary";
 import { existSession } from "../../assets/svg/svgs";
 import localforage from "localforage";
 import img1 from "../../assets/publicidad/img-1.jpg";
+import { getDataWithToken } from "../../utils/getDataToken";
 
 const ViewTurnTv = () => {
   const navigate = useNavigate();
@@ -21,19 +22,39 @@ const ViewTurnTv = () => {
   const [isPlaying, setIsPlaying] = React.useState(false);
   const [audiosPending, setAudiosPending] = React.useState([]);
   const [turnDataCall, setTurnDataCall] = React.useState("");
-
-  //Verificar si existe usuario logeado
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [images, setImages] = useState([]);
 
   useEffect(() => {
-    const existUser = async () => {
-      const user = await localforage.getItem("user");
+    getDataWithToken("tv/images").then((res) => {
+      setImages(res.images);
+    });
+  }, []);
 
-      if (!user) {
-        return navigate("/login");
+  const [currentImage, setCurrentImage] = useState(images[0]);
+  const [previousImage, setPreviousImage] = useState(images[0]);
+
+  //Verificar si existe usuario logeado
+  useEffect(() => {
+    const timer = setInterval(() => {
+      if (images.length > 0) {
+        setPreviousImage(images[currentImageIndex]);
+        const nextIndex = (currentImageIndex + 1) % images.length;
+        setCurrentImage(images[nextIndex]);
+        setCurrentImageIndex(nextIndex);
       }
-    };
+    }, 5000);
 
-    existUser();
+    return () => clearInterval(timer);
+  }, [currentImageIndex, images]);
+
+  useEffect(() => {
+    getDataWithToken("tv/images").then((res) => {
+      setImages(res.images);
+      if (res.images.length > 0) {
+        setCurrentImage(res.images[0]);
+      }
+    });
   }, []);
 
   const inicio = () => {
@@ -93,7 +114,7 @@ const ViewTurnTv = () => {
         </ContTurnTv>
         <ContVideo>
           <img
-            src={img1}
+            src={previousImage}
             alt=""
             style={{
               position: "absolute",
@@ -101,6 +122,21 @@ const ViewTurnTv = () => {
               height: "50%",
               top: 0,
               right: 0,
+              opacity: 0,
+              transition: "opacity 1s ease-in-out",
+              border: "none",
+            }}
+          />
+          <img
+            src={currentImage}
+            alt=""
+            style={{
+              position: "absolute",
+              width: "50%",
+              height: "50%",
+              top: 0,
+              right: 0,
+              border: "none",
             }}
           />
           {turnDataCall && (

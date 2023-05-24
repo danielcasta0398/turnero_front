@@ -22,6 +22,7 @@ import CreateTv from "../components/televisores/CreateTv";
 import ViewTvs from "../components/televisores/ViewTvs";
 import ViewTurnTv from "../components/televisores/ViewTurnTv";
 import NewTable from "../components/table/NewTable";
+import ComoponentUploadImg from "../components/televisores/ComoponentUploadImg";
 
 const Router = () => {
   return (
@@ -67,6 +68,10 @@ const Router = () => {
             <Route path="/dashboard/tv" element={<ViewTvs />} />
             <Route path="/dashboard/creartv" element={<CreateTv />} />
             <Route path="/dashboard/botones" element={<ViewButtons />} />
+            <Route
+              path="/dashboard/imagenes"
+              element={<ComoponentUploadImg />}
+            />
           </Route>
         </Route>
         {/* Esta ruta es para testear componentes */}

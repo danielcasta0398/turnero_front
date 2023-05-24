@@ -4,6 +4,7 @@ import {
   iconButton,
   iconTurnero,
   iconTv,
+  img,
   volverMenuLogo,
 } from "../assets/svg/svgs";
 import ContainerItemMenu from "../components/usuarios/ContainerItemMenu";
@@ -49,6 +50,11 @@ const Televisor = () => {
               icon={iconTv}
               text="Televisores"
               path="/dashboard/tv"
+            />
+            <ContainerItemMenu
+              icon={img}
+              text="Imagenes"
+              path="/dashboard/imagenes"
             />
             <ContainerVolverMenu onClick={() => afterMenu()}>
               {volverMenuLogo}

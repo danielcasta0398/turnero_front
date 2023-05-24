@@ -7,7 +7,10 @@ const ContainerItemMenu = ({ icon, text, path }) => {
   const location = useLocation();
 
   return (
-    <StyledNavLink to={path} exact="true">
+    <StyledNavLink
+      to={path}
+      isActive={(match, location) => location.pathname === path}
+    >
       <ContainerOnlyItemMenu>
         {icon}
         {text}
