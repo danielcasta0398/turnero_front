@@ -1,26 +1,13 @@
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import {
-  iconButton,
-  iconTurnero,
-  iconTv,
-  img,
-  volverMenuLogo,
-} from "../assets/svg/svgs";
+import { iconTv, img, volverMenuLogo } from "../assets/svg/svgs";
 import ContainerItemMenu from "../components/usuarios/ContainerItemMenu";
-import { useTts } from "react-tts";
 
 const Televisor = () => {
   const navigate = useNavigate();
 
   const afterMenu = () => {
     navigate("/dashboard");
-  };
-
-  const { speak } = useTts();
-
-  const handleClick = () => {
-    speak({ text: "URG 001 Porfavor pasar a caja 1" });
   };
 
   return (
