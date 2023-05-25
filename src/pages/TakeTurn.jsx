@@ -80,7 +80,7 @@ const TakeTurn = () => {
       {isOpen && <ModalKeyBoard />}
       <MainContainerTurn>
         <img src={logo} alt="Logo" />
-        <h1>Seleccione una opciones</h1>
+        <h1>Seleccione una opcion</h1>
         <div>
           {buttons?.buttons?.map(
             (button) =>
