@@ -54,22 +54,28 @@ export default function TestImpresion(props) {
 }
 
 const Div = styled.div`
+  margin: 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 5px;
-  width: 88mm;
+  width: 82mm;
 
   div {
     width: 100%;
     display: flex;
+    justify-content: space-between;
 
     p:nth-child(1) {
+      font-size: 0.8em;
       text-align: start;
     }
 
     p:nth-child(2) {
+      font-size: 0.8em;
+      text-align: end;
     }
   }
 
@@ -79,7 +85,7 @@ const Div = styled.div`
   }
 
   img {
-    width: 80mm;
+    width: 82mm;
     height: 10mm;
   }
 
@@ -95,7 +101,7 @@ const Div = styled.div`
   }
 
   @page {
-    size: 77mm 45mm;
+    size: 82mm 45mm;
     margin: 0;
   }
 `;

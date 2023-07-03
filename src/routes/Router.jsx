@@ -22,6 +22,7 @@ import CreateTv from "../components/televisores/CreateTv";
 import ViewTvs from "../components/televisores/ViewTvs";
 import ViewTurnTv from "../components/televisores/ViewTurnTv";
 import NewTable from "../components/table/NewTable";
+import RolesAuth from "../Auth/RolesAuth";
 import ComoponentUploadImg from "../components/televisores/ComoponentUploadImg";
 
 const Router = () => {
@@ -33,7 +34,13 @@ const Router = () => {
         <Route path="/verturnero/:id" element={<TakeTurn />} />
         <Route path="/verturnostv/:id" element={<ViewTurnTv />} />
         {/* Rutas para navegar al apartado de Dashboard */}
-        <Route element={<Dashboard />}>
+        <Route
+          element={
+            <RolesAuth>
+              <Dashboard />
+            </RolesAuth>
+          }
+        >
           <Route path="/dashboard" element={<DashboarAdmin />} />
           <Route element={<Usuarios />}>
             <Route path="/dashboard/crearusuario" element={<CreateUser />} />
