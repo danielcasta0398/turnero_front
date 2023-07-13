@@ -36,7 +36,7 @@ const RolesAuth = ({ children }) => {
     const currentPermissions = routePermissions[currentRoute];
 
     if (!permissionsPages?.[roleId]?.[currentPermissions]) {
-      navigate(permissionsPages[roleId].routerDefault); // redirige a una ruta por defecto si no tiene permisos
+      navigate(permissionsPages[roleId]?.routerDefault); // redirige a una ruta por defecto si no tiene permisos
     }
   }, [isLoading, user, currentRoute, navigate]);
 
