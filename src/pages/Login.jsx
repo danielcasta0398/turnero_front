@@ -24,7 +24,7 @@ const Login = () => {
   const [errPassword, setErrPassword] = useState(false);
 
   // Este Hook se ejecuta cuando se carga la pagina y verifica si hay una sesion activa
-  useCheckSession([], "/login");
+  useCheckSession([], "#/login");
 
   // Este useEffect se ejecuta cuando le dan click al boton de iniciar sesion
   const onSubmit = async (e) => {

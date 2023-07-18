@@ -158,7 +158,7 @@ export const isActiveSession = () => {
       );
 
       localforage.setItem("user", resData.data).then((value) => {
-        window.location.href = "/dashboard";
+        window.location.href = "#/dashboard";
       });
     } catch (err) {
       if (err.response.data.code === 1001) {
