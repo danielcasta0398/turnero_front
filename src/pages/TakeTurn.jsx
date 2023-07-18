@@ -122,7 +122,7 @@ const MainContainerTurn = styled.div`
 
     button {
       height: 120px;
-      font-size: xxx-large;
+      font-size: xx-large;
       margin: 0;
     }
   }
