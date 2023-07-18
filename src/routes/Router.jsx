@@ -33,7 +33,7 @@ import ComoponentUploadImg from "../components/televisores/ComoponentUploadImg";
 
 const Router = () => {
   return (
-    <HashRouter>
+    <BrowserRouter>
       <Routes>
         <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/login" element={<Login />} />
@@ -90,7 +90,7 @@ const Router = () => {
         {/* Esta ruta es para testear componentes */}
         <Route path="/test" element={<NewTable />} />
       </Routes>
-    </HashRouter>
+    </BrowserRouter>
   );
 };
 
