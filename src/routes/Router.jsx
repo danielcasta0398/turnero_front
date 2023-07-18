@@ -1,5 +1,11 @@
 import React from "react";
-import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import {
+  BrowserRouter,
+  Route,
+  Routes,
+  Navigate,
+  HashRouter,
+} from "react-router-dom";
 import DashboarAdmin from "../components/dashboard/DashboarAdmin";
 import CreateUser from "../components/usuarios/CreateUser";
 import ViewUsers from "../components/usuarios/ViewUsers";
@@ -27,7 +33,7 @@ import ComoponentUploadImg from "../components/televisores/ComoponentUploadImg";
 
 const Router = () => {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
         <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/login" element={<Login />} />
@@ -84,7 +90,7 @@ const Router = () => {
         {/* Esta ruta es para testear componentes */}
         <Route path="/test" element={<NewTable />} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 };
 
