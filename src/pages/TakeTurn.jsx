@@ -121,6 +121,7 @@ const MainContainerTurn = styled.div`
     width: 100%;
 
     button {
+      line-height: 37px;
       height: 120px;
       font-size: xx-large;
       margin: 0;
