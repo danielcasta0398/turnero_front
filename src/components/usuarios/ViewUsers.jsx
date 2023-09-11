@@ -33,6 +33,7 @@ const ViewUsers = () => {
       <Opciones
         tv={user.Televisor?.name ? user.Televisor?.name : ""}
         id={user.id}
+        name={user?.name}
       />,
     ];
   });

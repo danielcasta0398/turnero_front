@@ -13,8 +13,9 @@ import { TextField } from "@mui/material";
 import ButtonPrimary from "../buttons/ButtonPrimary";
 import ComponentChangePassword from "../usuarios/ComponentChangePassword";
 import ComponentEditProfile from "../usuarios/ComponentEditProfile";
+import ComponentDeleteUser from "../usuarios/ComponentDeleteUser";
 
-const Opciones = ({ tv, id }) => {
+const Opciones = ({ tv, id, name }) => {
   const dispatch = useDispatch();
   const [showOptions, setShowOptions] = useState(false);
   const optionsRef = useRef(null);
@@ -38,6 +39,11 @@ const Opciones = ({ tv, id }) => {
   const editProfile = () => {
     dispatch(setState({ option: "activeModalUserId", value: id }));
     dispatch(setState({ option: "activeModalType", value: "editProfile" }));
+  };
+
+  const deleteProfile = () => {
+    dispatch(setState({ option: "activeModalUserId", value: id }));
+    dispatch(setState({ option: "activeModalType", value: "deleteProfile" }));
   };
 
   const closeModal = () => {
@@ -77,6 +83,15 @@ const Opciones = ({ tv, id }) => {
         onClose={closeModal}
         render={<ComponentEditProfile id={id} />}
       />
+
+      <ModalMui
+        isActive={
+          activeModalUserId === id && activeModalType === "deleteProfile"
+        }
+        onClose={closeModal}
+        render={<ComponentDeleteUser id={id} name={name} />}
+      />
+
       <StyledButton ref={buttonRef} onClick={toggleOptions}>
         Opciones {showOptions && <Viñeta />}
       </StyledButton>
@@ -107,7 +122,11 @@ const Opciones = ({ tv, id }) => {
         <RowOptions onClick={changePassword} style={{}}>
           {passwordIcon} <p>Nueva Contraseña</p>
         </RowOptions>
-        <RowOptions colorPath={"rgb(255, 86, 48)"} color="rgb(255, 86, 48)">
+        <RowOptions
+          colorPath={"rgb(255, 86, 48)"}
+          color="rgb(255, 86, 48)"
+          onClick={deleteProfile}
+        >
           {deleteIcon} <p>Eliminar</p>
         </RowOptions>
       </ContOptions>
@@ -159,7 +178,7 @@ const Viñeta = styled.span`
 
 const ContOptions = styled.div`
   position: absolute;
-  width: 250px;
+  width: 260px;
   top: 38px;
   left: -120px;
   border-radius: 10px;

@@ -35,9 +35,9 @@ const RolesAuth = ({ children }) => {
     const roleId = user.user?.roleId;
     const currentPermissions = routePermissions[currentRoute];
 
-    if (!permissionsPages?.[roleId]?.[currentPermissions]) {
+    /*if (!permissionsPages?.[roleId]?.[currentPermissions]) {
       navigate(permissionsPages[roleId].routerDefault); // redirige a una ruta por defecto si no tiene permisos
-    }
+    }*/
   }, [isLoading, user, currentRoute, navigate]);
 
   // Si el usuario aún no ha sido cargado, no renderizamos nada
