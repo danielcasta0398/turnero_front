@@ -2,11 +2,10 @@ import React from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import styled from "styled-components";
 
-const ContainerItemMenu = ({ icon, text, path }) => {
-  const location = useLocation();
+const ContainerItemMenu = ({ icon, text, path, role }) => {
   return (
     <StyledNavLink
-      to={path}
+      to={role !== 2 && role !== 5 && path}
       isActive={(match, location) => location.pathname === path}
     >
       <ContainerOnlyItemMenu>

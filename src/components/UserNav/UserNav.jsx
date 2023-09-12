@@ -11,8 +11,6 @@ const UserNav = () => {
   const [user, setUser] = useState("");
   const [viewConfig, setViewConfig] = useState(false);
 
-  console.log(user)
-
   useEffect(() => {
     getDataStorage("user").then((value) => {
       const { user } = value;

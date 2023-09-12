@@ -31,6 +31,7 @@ const Turnos = () => {
         <ContainerMenu>
           <ContainerItemsMenu>
             <ContainerItemMenu
+              role={role}
               icon={iconUser}
               text="Turnos"
               path="/dashboard/consultorios"

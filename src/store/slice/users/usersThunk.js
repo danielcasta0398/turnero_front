@@ -6,6 +6,7 @@ import { msgError } from "../login.slice";
 import { setMessage } from "../messages";
 import { setMsgErrorUser, setRoles, setUser, setUserApi } from "./user.slice";
 import { setState } from "../states";
+import { axiosInstance } from "../../../utils/axios";
 
 //Manejador de login y redireccion dependiendo del rol
 export const loginUser = (user) => (dispatch) => {
@@ -203,4 +204,21 @@ export const getUsersByRol = (rolId) => {
       dispatch(setLoading(false));
     }, 1000);
   };
+};
+
+export const deleteUser = (id) => async (dispatch, getState) => {
+  const { resApi } = getState().users;
+
+  const newData = resApi.filter((item) => item.id !== id);
+
+  dispatch(setUserApi(newData));
+
+  try {
+    await axiosInstance.delete(`users/delete/${id}`);
+    dispatch(setState({ option: "isLoadingOptions", value: false }));
+    dispatch(setState({ option: "activeModalUserId", value: null }));
+    dispatch(setState({ option: "activeModalType", value: null }));
+  } catch (err) {
+    console.log(err);
+  }
 };
