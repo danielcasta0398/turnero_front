@@ -62,7 +62,7 @@ const RowTable = ({ username, name, session, idUser }) => {
             fontSize: "1em",
           }}
         />
-        <ButtonBasic
+        {/* <ButtonBasic
           textButton={"Editar"}
           bgColor="#d16125"
           styl={{
@@ -71,7 +71,7 @@ const RowTable = ({ username, name, session, idUser }) => {
             margin: "0",
             fontSize: "1em",
           }}
-        />
+        /> */}
         {viewButtons && <TestViewButtons data={changeState} />}
       </ContainerConfig>
     </ContainerOnlyUser>

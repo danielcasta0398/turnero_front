@@ -1,4 +1,5 @@
 import { getDataWithToken } from "../../../utils/getDataToken";
+import { socket } from "../../../utils/socket";
 import { setDataTurneros } from "./turnero.slice";
 
 export const getAllTurneros = () => (dispatch) => {
@@ -13,6 +14,15 @@ export const getAllTurneros = () => (dispatch) => {
 export const getAllButtonsByUser =
   (id, time = 1000, loading = true) =>
   (dispatch) => {
+    socket.on("getNewButtons", async (data) => {
+      console.log("getNewButtons", data);
+      const resData = await getDataWithToken(
+        `turner/allbuttons/${data}`,
+        "GET"
+      );
+      dispatch(setDataTurneros({ option: "buttons", value: resData }));
+    });
+
     if (loading) {
       dispatch(setDataTurneros({ option: "isLoading", value: true }));
     }
@@ -66,7 +76,21 @@ export const getButtonById = (id) => async (dispatch) => {
   dispatch(setDataTurneros({ option: "isLoading", value: false }));
 };
 
-export const updateButtons = (id, data) => async (dispatch) => {
+export const updateButtons = (id, data) => async (dispatch, getState) => {
+  const { turnero } = getState();
+  socket.on("updateButton", (data) => {
+    const updatedButtons = turnero.buttons.buttons.map((button) => {
+      if (button.id === data.id) {
+        return data; // Esto combina las propiedades del objeto original con las del objeto 'data'
+      }
+      return button;
+    });
+
+    dispatch(
+      setDataTurneros({ option: "buttons", value: { buttons: updatedButtons } })
+    ); // Actualiza el estado
+  });
+
   dispatch(setDataTurneros({ option: "isLoadingEdit", value: true }));
   const res = await getDataWithToken(
     `turner/button/update/${id}`,

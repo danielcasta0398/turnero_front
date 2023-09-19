@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 
-const ButtonPrimary = ({ children, className, ...rest }) => {
+const ButtonPrimary = ({ children, className, style, ...other }) => {
   return (
-    <Button className={className} {...rest}>
+    <Button className={className} style={style} {...other}>
       {children}
     </Button>
   );

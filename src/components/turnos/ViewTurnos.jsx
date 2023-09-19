@@ -11,18 +11,7 @@ import {
   getAllTurneros,
 } from "../../store/slice/turneros/turneroThunk";
 import { getTurnsByUser } from "../../store/slice/turns/turnsThunk";
-import {
-  getAllUsers,
-  getUsersByRol,
-  setTurneros,
-} from "../../store/slice/users";
-import { upperCase } from "../../utils/upperCase";
-import ButtonBasic from "../buttons/ButtonBasic";
-import RowTable from "../table/RowTable";
 import BasicTabs from "../tabs/BasicTabs";
-import TextToSpeech from "../TextToSpeech";
-import TestViewButtons from "./TestViewButtons";
-import { getDataStorage } from "../../utils/getDataStorage";
 
 const ViewTurnos = () => {
   const dispatch = useDispatch();

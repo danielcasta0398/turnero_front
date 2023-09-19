@@ -8,15 +8,7 @@ import {
   getAllButtonsByUser,
   getAllTurneros,
 } from "../../store/slice/turneros/turneroThunk";
-import {
-  getAllUsers,
-  getUsersByRol,
-  setTurneros,
-} from "../../store/slice/users";
-import { upperCase } from "../../utils/upperCase";
-import ButtonBasic from "../buttons/ButtonBasic";
 import RowTable from "../table/RowTable";
-import TestViewButtons from "./TestViewButtons";
 
 const ViewTurneros = () => {
   const dispatch = useDispatch();

@@ -87,6 +87,8 @@ const TestCreateButton = () => {
           ? userNotiffication
           : onlyButtonInfo.button.users,
     };
+
+    console.log("test =>>>", data);
     dispatch(updateButtons(onlyButtonInfo.button.id, data));
   };
 

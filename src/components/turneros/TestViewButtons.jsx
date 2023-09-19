@@ -15,6 +15,7 @@ import ButtonBasic from "../buttons/ButtonBasic";
 import ButtonPrimary from "../buttons/ButtonPrimary";
 import CollapsibleTable from "../table/CollapsibleTable";
 import TestCreateButton from "./TestCreateButton";
+import { Box } from "@mui/material";
 
 const TestViewButtons = ({ data }) => {
   const dispatch = useDispatch();
@@ -109,9 +110,9 @@ const TestViewButtons = ({ data }) => {
               return (
                 <RowTable key={button.id}>
                   <p>{button.nameButton}</p>
-                  <div>
+                  <Box display="flex" justifyContent="center">
                     <ButtonPrimary>Ver Usuarios</ButtonPrimary>
-                  </div>
+                  </Box>
                   <ContainerSession
                     session={button.status === "active" ? true : false}
                   >

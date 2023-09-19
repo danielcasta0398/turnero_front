@@ -11,6 +11,7 @@ import { getAllUsers } from "../../store/slice/users";
 import ButtonBasic from "../buttons/ButtonBasic";
 import ButtonPrimary from "../buttons/ButtonPrimary";
 import MultiplesValues from "../inputs/MultiplesValues";
+import { Stack, TextField } from "@mui/material";
 
 const TestCreateButton = () => {
   const dispatch = useDispatch();
@@ -24,6 +25,8 @@ const TestCreateButton = () => {
   const [textButton, setTextButton] = useState(
     onlyButtonInfo.button?.nameButton ? onlyButtonInfo.button?.nameButton : ""
   );
+  const [orderButton, setOrderButton] = useState(onlyButtonInfo.button?.order);
+
   const [buttonActive, setButtonActive] = useState(true);
   const [nameUsers, setNameUsers] = useState([]);
   const [valueDefault, setValueDefault] = useState([]);
@@ -42,6 +45,10 @@ const TestCreateButton = () => {
         return { title: user.username, year: "2023", idUser: user.id };
       });
       setValueDefault(data);
+    }
+
+    if (onlyButtonInfo.button?.order) {
+      setOrderButton(onlyButtonInfo.button?.order);
     }
   }, [onlyButtonInfo]);
 
@@ -86,6 +93,7 @@ const TestCreateButton = () => {
         userNotiffication.length >= 0
           ? userNotiffication
           : onlyButtonInfo.button.users,
+      order: orderButton,
     };
 
     dispatch(updateButtons(onlyButtonInfo.button.id, data));
@@ -105,7 +113,39 @@ const TestCreateButton = () => {
       </div>
       <div className={textButton ? "preview-button mostrar" : "oculto"}>
         <p>Vista previa del boton</p>
-        <ButtonPrimary>{textButton}</ButtonPrimary>
+        <Stack direction="row" spacing={2}>
+          <ButtonPrimary style={{ width: "50% !important" }}>
+            {textButton}
+          </ButtonPrimary>
+          <TextField
+            name="order"
+            label="Orden del boton"
+            variant="outlined"
+            value={orderButton}
+            onChange={(e) => setOrderButton(e.target.value)}
+            sx={{
+              width: "150px",
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": {
+                  borderColor: "gray", // Color del borde
+                },
+                "&:hover fieldset": {
+                  borderColor: "#305381", // Color del borde al pasar el mouse
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: "#305381", // Color del borde al enfocarse
+                },
+              },
+              "& .MuiInputLabel-root": {
+                color: "#305381", // Color de la etiqueta
+              },
+              "& .MuiInputLabel-root.Mui-focused": {
+                color: "#305381", // Color de la etiqueta al enfocarse
+              },
+            }}
+          />
+        </Stack>
+
         <MultiplesValues
           label={"Notificar a:"}
           placeholder={"Escribe el usuario"}
@@ -141,6 +181,7 @@ const ContainerCreateButton = styled.div`
   justify-content: center;
   align-items: center;
   gap: 25px;
+  padding: 10px;
 
   .cont-create-boton {
     display: flex;
