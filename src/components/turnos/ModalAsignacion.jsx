@@ -27,21 +27,20 @@ const ModalAsignacion = () => {
   const [options, setOptions] = useState([]);
   const [idUser, setIdUser] = useState(null);
   const [name, setName] = useState(onlyTurn[0].nameUser);
+  const [cedula, setCedula] = useState(onlyTurn[0].cedulaUser);
   const [isSucess, setIsSucess] = useState(false);
 
   useEffect(() => {
     localforage.getItem(`${onlyTurn[0].id}`).then((value) => {
       if (!value) {
-        console.log("no existe");
         localforage.setItem(`${onlyTurn[0].id}`, { count: 1 });
         setCount(1);
       } else {
-        console.log("existe");
         localforage.setItem(`${onlyTurn[0].id}`, { count: value.count + 1 });
         setCount(value.count + 1);
       }
     });
-  }, [timerEndDate]);
+  }, [timerEndDate, onlyTurn]);
 
   useEffect(() => {
     const options = userAsigned.users?.map((user) => {
@@ -55,7 +54,7 @@ const ModalAsignacion = () => {
 
   useEffect(() => {
     dispatch(getTurnsAsigned());
-  }, []);
+  }, [dispatch]);
 
   const endTime = () => {
     setIsStart(false);
@@ -86,7 +85,7 @@ const ModalAsignacion = () => {
 
     const data = {
       nameUser: name,
-      cedulaUser: onlyTurn[0].cedulaUser,
+      cedulaUser: cedula,
       userId: idUser,
       turnId: onlyTurn[0].id,
     };
@@ -124,7 +123,8 @@ const ModalAsignacion = () => {
               type="text"
               textName="Cedula"
               name="name"
-              value={onlyTurn[0].cedulaUser}
+              value={cedula}
+              onChange={(e) => setCedula(e.target.value)}
             />
             <InputAutocompleteSearch
               option={options}
@@ -146,7 +146,6 @@ const ModalAsignacion = () => {
                 {isStart ? (
                   <Countdown
                     intervalDelay={1000}
-                    onStart={() => console.log("Iniciado")}
                     onComplete={() => endTime()}
                     date={timerEndDate} // Establece la duración del temporizador en milisegundos
                     renderer={({ seconds }) => (
