@@ -1,8 +1,9 @@
-import React, { forwardRef, useEffect, useRef } from "react";
+import React, { forwardRef, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { useReactToPrint } from "react-to-print";
 import styled from "styled-components";
 import logo from "../assets/logos/logo-principal.png";
+import localforage from "localforage";
 
 function formatDate(date) {
   const day = date.getDate().toString().padStart(2, "0");
@@ -19,6 +20,18 @@ export default function TestImpresion(props) {
   const { isPrint, infoTurn } = useSelector((state) => state.turn);
   const componentRef = useRef();
 
+  const [nameTurn, setNameTurn] = useState("");
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
+
+  useEffect(() => {
+    const getNameTurno = async () => {
+      const data = await localforage.getItem("user");
+      setNameTurn(data.user.name);
+      setIsDataLoaded(true);
+    };
+    getNameTurno();
+  }, []);
+
   const ComponentToPrint = forwardRef((props, ref) => {
     const now = new Date();
     const fechaHora = formatDate(now);
@@ -29,18 +42,18 @@ export default function TestImpresion(props) {
         <h2>{infoTurn?.nameButton.toUpperCase()}</h2>
         <h1>{infoTurn?.sequence}</h1>
         <div>
-          <p>Turnero 1</p>
           <p>{fechaHora}</p>
+          <p>{nameTurn}</p>
         </div>
       </Div>
     );
   });
 
   useEffect(() => {
-    if (isPrint) {
+    if (isPrint && isDataLoaded) {
       handlePrint();
     }
-  }, [isPrint]);
+  }, [isPrint, isDataLoaded]);
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
@@ -85,7 +98,7 @@ const Div = styled.div`
   }
 
   img {
-    width: 82mm;
+    width: 72mm;
     height: 10mm;
   }
 
@@ -101,7 +114,7 @@ const Div = styled.div`
   }
 
   @page {
-    size: 82mm 45mm;
+    size: 72mm 45mm;
     margin: 0;
   }
 `;
