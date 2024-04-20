@@ -74,8 +74,15 @@ const ModalAsignacion = () => {
   };
 
   const end = () => {
+    const data = {
+      nameUser: name,
+      cedulaUser: cedula,
+      userId: idUser,
+      turnId: onlyTurn[0].id,
+    };
+
     localforage.removeItem(`${onlyTurn[0].id}`);
-    dispatch(endTurn(onlyTurn[0].id));
+    dispatch(endTurn(onlyTurn[0].id, data));
   };
 
   const asignar = () => {

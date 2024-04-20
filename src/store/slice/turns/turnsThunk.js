@@ -20,8 +20,6 @@ export const createTurn = () => {
       dispatch(setIsOpenModal(false));
       dispatch(setDataTurn({ option: "isPrint", value: false }));
     }, 5000);
-
-    console.log(res);
   };
 };
 
@@ -71,6 +69,7 @@ export const getTurnsAsigned = () => {
 
 export const asignedTurn = (data) => {
   return async (dispatch) => {
+    console.log("Data =>>>", data);
     await getDataWithToken(`turn/asignedturn/${data.turnId}`, "POST", data);
   };
 };
@@ -81,10 +80,11 @@ export const deleteTurn = (id) => {
   };
 };
 
-export const endTurn = (id) => {
+export const endTurn = (id, data) => {
   console.log(id);
   return async (dispatch) => {
     await getDataWithToken(`turn/endturn/${id}`, "PATCH");
     dispatch(setDataTurn({ option: "viewModal", value: false }));
+    await getDataWithToken(`turn/asignedturn/${data.turnId}`, "POST", data);
   };
 };

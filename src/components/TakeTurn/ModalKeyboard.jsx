@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
 import styled from "styled-components";
 import KeyBoardNumber from "../keyboard/KeyBoardNumber";
 import Modal from "../modal/Modal";
@@ -7,11 +9,15 @@ import { setValueDocument } from "../../store/slice/valueDocument.slice";
 import { createTurn } from "../../store/slice/turns/turnsThunk";
 import Print from "../../animations/Print";
 
+import LoadingButton from "@mui/lab/LoadingButton";
+
 const ModalKeyBoard = () => {
   const valueDocument = useSelector((state) => state.valueDocument);
   const dispatch = useDispatch();
   const state = true;
   const { isPrint } = useSelector((state) => state.turn);
+
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
 
   const deleteEndCharacter = () => {
     const value = valueDocument.toString();
@@ -19,9 +25,11 @@ const ModalKeyBoard = () => {
     console.log(valueDocument);
   };
 
-  const createTurner = () => {
-    dispatch(createTurn());
-    console.log("create turner");
+  const createTurner = async () => {
+    setIsDataLoaded(true);
+    await dispatch(createTurn());
+
+    setIsDataLoaded(false);
   };
 
   const render = (
@@ -67,11 +75,26 @@ const ModalKeyBoard = () => {
                 onClick={deleteEndCharacter}
                 styl={{ fontSize: "1.5em", height: "60px", margin: "0" }}
               />
-              <ButtonBasic
+
+              <LoadingButton
+                fullWidth
+                variant="contained"
+                loading={isDataLoaded}
+                onClick={createTurner}
+                sx={{
+                  bgcolor: "#305381",
+                  textTransform: "none",
+                  fontSize: "1.5em",
+                }}
+              >
+                Continuar
+              </LoadingButton>
+
+              {/*<ButtonBasic
                 textButton={"Continuar"}
                 onClick={createTurner}
                 styl={{ fontSize: "1.5em", height: "60px", margin: "0" }}
-              />
+            /> */}
             </div>
           </ContainerInput>
         </>
