@@ -3,6 +3,7 @@ import { getDataStorage } from "../../../utils/getDataStorage";
 import { getDataWithToken } from "../../../utils/getDataToken";
 import { setIsOpenModal } from "../isOpenModal.slice";
 import { setDataTurn } from "./turns.slice";
+import { axiosInstance } from "../../../utils/axios";
 
 export const createTurn = () => {
   return async (dispatch, getState) => {
@@ -83,8 +84,9 @@ export const deleteTurn = (id) => {
 export const endTurn = (id, data) => {
   console.log(id);
   return async (dispatch) => {
-    await getDataWithToken(`turn/endturn/${id}`, "PATCH");
+    const response = await axiosInstance.put(`turn/endturn/${id}`);
+    console.log(response.data);
     dispatch(setDataTurn({ option: "viewModal", value: false }));
-    await getDataWithToken(`turn/asignedturn/${data.turnId}`, "POST", data);
+    // await getDataWithToken(`turn/asignedturn/${data.turnId}`, "POST", data);
   };
 };

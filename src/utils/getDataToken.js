@@ -13,6 +13,7 @@ export const getDataWithToken = async (endpoint, method, data) => {
       url: `${process.env.REACT_APP_LINK_API}/${endpoint}`,
       data,
     });
+    console.log(resApi.data);
     return resApi.data;
   } catch (err) {
     return err.response.data;
