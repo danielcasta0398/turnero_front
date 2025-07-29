@@ -2,7 +2,6 @@ import React, { forwardRef, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { useReactToPrint } from "react-to-print";
 import styled from "styled-components";
-import logo from "../assets/logos/logo-principal.png";
 import localforage from "localforage";
 
 function formatDate(date) {
@@ -17,6 +16,7 @@ function formatDate(date) {
 }
 
 export default function TestImpresion(props) {
+  const { configurationData } = useSelector((state) => state.configuration);
   const { isPrint, infoTurn } = useSelector((state) => state.turn);
   const componentRef = useRef();
 
@@ -38,7 +38,7 @@ export default function TestImpresion(props) {
 
     return (
       <Div ref={ref}>
-        <img src={logo} alt="image" width={"80px"} height="10px" />
+        <img src={configurationData?.logo_url} alt="logo" width={"80px"} height="10px" />
         <h2>{infoTurn?.nameButton.toUpperCase()}</h2>
         <h1>{infoTurn?.sequence}</h1>
         <div>
@@ -53,6 +53,8 @@ export default function TestImpresion(props) {
     if (isPrint && isDataLoaded) {
       handlePrint();
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isPrint, isDataLoaded]);
 
   const handlePrint = useReactToPrint({

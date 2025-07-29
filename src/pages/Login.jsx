@@ -8,7 +8,6 @@ import {
   MaintContainer,
 } from "../components/containers/MainContainer";
 import InputBasic from "../components/inputs/InputBasic";
-import logo from "../assets/logos/logo.png";
 import { loginUser } from "../store/slice/users";
 import styled from "styled-components";
 import { useCheckSession } from "../hooks/useCheckSession";
@@ -17,6 +16,7 @@ const Login = () => {
   const dispatch = useDispatch();
   const loginState = useSelector((state) => state.login);
   const loading = useSelector((state) => state.loading);
+  const {logo_url} = useSelector((state) => state.configuration.configurationData) || {};
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
   const [isDisabled, setIsDisabled] = useState(true);
@@ -61,6 +61,8 @@ const Login = () => {
     }
   };
 
+  console.log(`${process.env.REACT_APP_URL_IMAGE}${logo_url}`);
+
   return (
     <MaintContainer
       style={{
@@ -71,7 +73,7 @@ const Login = () => {
         gap: "30px",
       }}
     >
-      <ImgLogo src={logo} alt="logo" style={{}} />
+      <ImgLogo src={`${process.env.REACT_APP_URL_IMAGE}${logo_url}`} alt="logo" style={{}} />
       {
         <ContainerForm>
           {loading ? (

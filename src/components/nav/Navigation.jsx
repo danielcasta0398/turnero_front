@@ -2,10 +2,13 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
 import styled from "styled-components";
-import logo from "../../assets/logos/logo-blanco.png";
 import UserNav from "../UserNav/UserNav";
+import { useSelector } from "react-redux";
 
 const Navigation = ({ userName }) => {
+
+  const { configurationData } = useSelector((state) => state.configuration);
+
   const isMobile = useMediaQuery({ maxWidth: 520 });
   return isMobile ? (
     <ul className="nav__mobile">
@@ -27,7 +30,7 @@ const Navigation = ({ userName }) => {
     </ul>
   ) : (
     <Nav>
-      <img src={logo} alt="logo" />
+      <img src={`${process.env.REACT_APP_URL_IMAGE}${configurationData?.logo_white_url || configurationData?.logo_url}`} alt="logo" />
       <UserNav userName={userName} />
     </Nav>
   );
@@ -78,5 +81,3 @@ const Nav = styled.nav`
     padding: 0;
   }*/
 `;
-
-const ContUser = styled.div``;

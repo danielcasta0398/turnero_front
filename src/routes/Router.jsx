@@ -4,7 +4,6 @@ import {
   Route,
   Routes,
   Navigate,
-  HashRouter,
 } from "react-router-dom";
 import DashboarAdmin from "../components/dashboard/DashboarAdmin";
 import CreateUser from "../components/usuarios/CreateUser";
@@ -29,6 +28,8 @@ import ViewTvs from "../components/televisores/ViewTvs";
 import ViewTurnTv from "../components/televisores/ViewTurnTv";
 import NewTable from "../components/table/NewTable";
 import RolesAuth from "../Auth/RolesAuth";
+import Configuracion from "../pages/Configuracion";
+import LogoConfig from "../components/configuracion/LogoConfig";
 import ComoponentUploadImg from "../components/televisores/ComoponentUploadImg";
 
 const Router = () => {
@@ -85,6 +86,14 @@ const Router = () => {
               path="/dashboard/imagenes"
               element={<ComoponentUploadImg />}
             />
+          </Route>
+          {/* Rutas para navegar al apartado de Configuración */}
+          <Route element={<Configuracion />}>
+            <Route 
+              path="/dashboard/configuracion" 
+              element={<Navigate to="/dashboard/configuracion/logo" replace />} 
+            />
+            <Route path="/dashboard/configuracion/logo" element={<LogoConfig />} />
           </Route>
         </Route>
         {/* Esta ruta es para testear componentes */}
