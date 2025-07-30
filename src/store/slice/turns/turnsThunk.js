@@ -1,4 +1,3 @@
-import { io } from "socket.io-client";
 import { getDataStorage } from "../../../utils/getDataStorage";
 import { getDataWithToken } from "../../../utils/getDataToken";
 import { setIsOpenModal } from "../isOpenModal.slice";
@@ -57,7 +56,7 @@ export const getTurnsByUser = (status) => {
 
 export const getTurnsById = (id) => {
   return async (dispatch) => {
-    const data = await getDataWithToken(`turn/updatestate/${id}`, "PATCH");
+    await getDataWithToken(`turn/updatestate/${id}`, "PATCH");
   };
 };
 

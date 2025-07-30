@@ -38,7 +38,7 @@ export default function TestImpresion(props) {
 
     return (
       <Div ref={ref}>
-        <img src={configurationData?.logo_url} alt="logo" width={"80px"} height="10px" />
+        <img src={`${process.env.REACT_APP_URL_IMAGE}${configurationData?.logo_url}`} alt="logo" width={"80px"} height="10px" />
         <h2>{infoTurn?.nameButton.toUpperCase()}</h2>
         <h1>{infoTurn?.sequence}</h1>
         <div>

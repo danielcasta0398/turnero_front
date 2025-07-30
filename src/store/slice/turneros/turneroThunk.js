@@ -58,7 +58,7 @@ export const viewButtonTurnero =
 export const changeStateButton = (id, userId) => async (dispatch) => {
   dispatch(setDataTurneros({ option: "isLoadingChangeState", value: true }));
   dispatch(setDataTurneros({ option: "clickIdButton", value: id }));
-  const res = await getDataWithToken(
+  await getDataWithToken(
     `turner/button/updatestate/${id}`,
     "PATCH"
   );
@@ -92,7 +92,7 @@ export const updateButtons = (id, data) => async (dispatch, getState) => {
   });
 
   dispatch(setDataTurneros({ option: "isLoadingEdit", value: true }));
-  const res = await getDataWithToken(
+  await getDataWithToken(
     `turner/button/update/${id}`,
     "PATCH",
     data

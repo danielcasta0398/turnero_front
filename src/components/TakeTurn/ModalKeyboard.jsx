@@ -14,7 +14,6 @@ import LoadingButton from "@mui/lab/LoadingButton";
 const ModalKeyBoard = () => {
   const valueDocument = useSelector((state) => state.valueDocument);
   const dispatch = useDispatch();
-  const state = true;
   const { isPrint } = useSelector((state) => state.turn);
 
   const [isDataLoaded, setIsDataLoaded] = useState(false);

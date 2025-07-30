@@ -8,8 +8,6 @@ import { upperCase } from "../../utils/upperCase";
 import { useCheckSession } from "../../hooks/useCheckSession";
 import NewTable from "../table/NewTable";
 import Opciones from "../ComponenteOpciones/Opciones";
-import Modal from "../modal/Modal";
-import ModalMui from "../modal/ModalMui";
 
 const itemsHeader = ["Usuario", "Nombre", "Rol", "Opciones"];
 
@@ -27,9 +25,9 @@ const ViewUsers = () => {
 
   const newData = users?.map((user) => {
     return [
-      user.username,
-      user.name,
-      upperCase(user.role.nombreRol),
+      user.username || "Sin usuario",
+      user.name || "Sin nombre",
+      user.role?.nombreRol ? upperCase(user.role.nombreRol) : "Sin rol",
       <Opciones
         tv={user.Televisor?.name ? user.Televisor?.name : ""}
         id={user.id}
@@ -56,51 +54,4 @@ const ContainerPrincipalViewUser = styled.div`
   flex-direction: column;
   width: 100%;
   height: 100%;
-`;
-
-const ContainerNameTable = styled.div`
-  width: 100%;
-  height: 50px;
-  border-bottom: 2px solid #e8f0fe;
-  display: flex;
-  align-items: center;
-  padding: 20px;
-
-  p {
-    font-weight: 500;
-    color: #5f6368;
-  }
-`;
-
-const ContainerOnlyUser = styled.div`
-  height: 50px;
-  padding: 0 20px;
-  display: flex;
-`;
-
-const ContainerImgUser = styled.div`
-  width: 30%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  font-size: 1em;
-
-  div {
-    width: 30px;
-    height: 30px;
-    background-color: blue;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    font-weight: 500;
-  }
-`;
-
-const ContAllUsersTable = styled.div`
-  width: 100%;
-  height: 100%;
-  overflow: auto;
 `;

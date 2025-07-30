@@ -1,24 +1,26 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import ButtonBasic from "../components/buttons/ButtonBasic";
 import { MaintContainer } from "../components/containers/MainContainer";
 import ModalKeyBoard from "../components/TakeTurn/ModalKeyboard";
 import { setIsOpenModal } from "../store/slice/isOpenModal.slice";
-import logo from "../assets/logos/logo.png";
 import { setIsActiveModal } from "../store/slice/isActiveModal.slice";
 import { setValueDocument } from "../store/slice/valueDocument.slice";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   getAllButtonsByUser,
-  viewButtonTurnero,
 } from "../store/slice/turneros/turneroThunk";
 import io from "socket.io-client";
 import { getDataStorage } from "../utils/getDataStorage";
 import { setDataTurneros } from "../store/slice/turneros/turnero.slice";
 import TestImpresion from "../components/TestImpresion";
 
+
 const TakeTurn = () => {
+
+  const { configurationData } = useSelector((state) => state.configuration);
+  console.log(configurationData);
   const isOpen = useSelector((state) => state.isOpenModal);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -41,7 +43,7 @@ const TakeTurn = () => {
         navigate("/login");
       }
     });
-  }, []);
+  }, [dispatch, id, navigate]);
 
   const openModal = (id) => {
     dispatch(setDataTurneros({ option: "buttonId", value: id }));
@@ -66,7 +68,7 @@ const TakeTurn = () => {
     return () => {
       socket.disconnect();
     };
-  }, []);
+  }, [dispatch, id]);
 
   return (
     <MaintContainer
@@ -79,7 +81,7 @@ const TakeTurn = () => {
       {isPrint && <TestImpresion />}
       {isOpen && <ModalKeyBoard />}
       <MainContainerTurn>
-        <img src={logo} alt="Logo" />
+        <img src={`${process.env.REACT_APP_URL_IMAGE}${configurationData?.logo_url}`} alt="Logo" />
         <h1>Seleccione una opcion</h1>
         <div>
           {buttons?.buttons?.map(

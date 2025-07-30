@@ -1,22 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import logo from "../../assets/logos/logo.png";
 import { getTurnsByTv } from "../../store/slice/televisores/televisoresThunk";
-import TestVideo from "../TestVideo";
-import TestVideoHtml from "../TestVideoHtml";
 import { logOut } from "../../utils/logOutUtils";
 import { useNavigate } from "react-router-dom";
-import ButtonPrimary from "../buttons/ButtonPrimary";
 import { existSession } from "../../assets/svg/svgs";
-import localforage from "localforage";
-import img1 from "../../assets/publicidad/img-1.jpg";
 import { getDataWithToken } from "../../utils/getDataToken";
 
 const ViewTurnTv = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { turns } = useSelector((state) => state.televisores.turnsTv);
+  const { configurationData } = useSelector((state) => state.configuration);
   let { turnSound } = useSelector((state) => state.televisores);
   const [url, setUrl] = React.useState("");
   const [isPlaying, setIsPlaying] = React.useState(false);
@@ -24,38 +19,66 @@ const ViewTurnTv = () => {
   const [turnDataCall, setTurnDataCall] = React.useState("");
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [images, setImages] = useState([]);
+  const [currentImage, setCurrentImage] = useState(null);
+  const [previousImage, setPreviousImage] = useState(null);
+  const [imagesLoading, setImagesLoading] = useState(true);
 
+  // Fetch images from API
   useEffect(() => {
-    getDataWithToken("tv/images").then((res) => {
-      setImages(res.images);
-    });
+    const fetchImages = async () => {
+      try {
+        setImagesLoading(true);
+        const res = await getDataWithToken("tv/images");
+        
+        if (res.success && res.media && res.media.length > 0) {
+          setImages(res.media);
+          setCurrentImage(res.media[0]);
+          setPreviousImage(res.media[0]);
+        } else {
+          setImages([]);
+          setCurrentImage(null);
+          setPreviousImage(null);
+        }
+      } catch (error) {
+        console.error("Error fetching images:", error);
+        setImages([]);
+        setCurrentImage(null);
+        setPreviousImage(null);
+      } finally {
+        setImagesLoading(false);
+      }
+    };
+
+    fetchImages();
   }, []);
 
-  const [currentImage, setCurrentImage] = useState(images[0]);
-  const [previousImage, setPreviousImage] = useState(images[0]);
+  const goToNextMedia = React.useCallback(() => {
+    setPreviousImage(images[currentImageIndex]);
+    const nextIndex = (currentImageIndex + 1) % images.length;
+    setCurrentImage(images[nextIndex]);
+    setCurrentImageIndex(nextIndex);
+  }, [images, currentImageIndex]);
 
-  //Verificar si existe usuario logeado
+  const handleVideoEnd = React.useCallback(() => {
+    goToNextMedia();
+  }, [goToNextMedia]);
+
+  // Media rotation logic - handles both images and videos
   useEffect(() => {
-    const timer = setInterval(() => {
-      if (images.length > 0) {
-        setPreviousImage(images[currentImageIndex]);
-        const nextIndex = (currentImageIndex + 1) % images.length;
-        setCurrentImage(images[nextIndex]);
-        setCurrentImageIndex(nextIndex);
-      }
-    }, 5000);
+    if (images.length <= 1) return;
 
-    return () => clearInterval(timer);
-  }, [currentImageIndex, images]);
+    const currentMedia = images[currentImageIndex];
+    
+    // If current media is an image, use timer
+    if (currentMedia && currentMedia.type !== "video") {
+      const timer = setInterval(() => {
+        goToNextMedia();
+      }, 5000);
 
-  useEffect(() => {
-    getDataWithToken("tv/images").then((res) => {
-      setImages(res.images);
-      if (res.images.length > 0) {
-        setCurrentImage(res.images[0]);
-      }
-    });
-  }, []);
+      return () => clearInterval(timer);
+    }
+    // For videos, we'll handle the transition on the onEnded event
+  }, [currentImageIndex, images, goToNextMedia]);
 
   const inicio = () => {
     console.log("inicio");
@@ -75,7 +98,7 @@ const ViewTurnTv = () => {
       setAudiosPending(audiosPending.concat(turnSound));
       console.log(audiosPending);
     }
-  }, [turnSound]);
+  }, [turnSound, audiosPending, isPlaying]);
 
   const termino = () => {
     if (audiosPending.length > 0) {
@@ -90,7 +113,7 @@ const ViewTurnTv = () => {
 
   useEffect(() => {
     dispatch(getTurnsByTv());
-  }, []);
+  }, [dispatch]);
 
   return (
     <MainContainerTurnTv>
@@ -100,7 +123,7 @@ const ViewTurnTv = () => {
       </ContIconExit>
 
       <ContLogo>
-        <img src={logo} alt="logo" />
+        <img src={`${process.env.REACT_APP_URL_IMAGE}${configurationData?.logo_url}`} alt="logo" style={{ maxWidth: "300px", maxHeight: "200px" }} />
       </ContLogo>
 
       <ContBodyTurnTv>
@@ -113,32 +136,88 @@ const ViewTurnTv = () => {
           ))}
         </ContTurnTv>
         <ContVideo>
-          <img
-            src={previousImage}
-            alt=""
-            style={{
-              position: "absolute",
-              width: "50%",
-              height: "50%",
-              top: 0,
-              right: 0,
-              opacity: 0,
-              transition: "opacity 1s ease-in-out",
-              border: "none",
-            }}
-          />
-          <img
-            src={currentImage}
-            alt=""
-            style={{
-              position: "absolute",
-              width: "50%",
-              height: "50%",
-              top: 0,
-              right: 0,
-              border: "none",
-            }}
-          />
+          {imagesLoading ? (
+            <ContNoImages>
+              <p>Cargando imágenes...</p>
+            </ContNoImages>
+          ) : images.length === 0 ? (
+            <ContNoImages>
+              <p>Debes configurar las imágenes desde el panel administrativo</p>
+            </ContNoImages>
+          ) : (
+            <>  
+              {previousImage && (
+                previousImage.type === "video" ? (
+                  <video
+                    src={`${process.env.REACT_APP_API_URL}${previousImage.url}`}
+                    style={{
+                      position: "absolute",
+                      width: "50%",
+                      height: "50%",
+                      top: 0,
+                      right: 0,
+                      opacity: 0,
+                      transition: "opacity 1s ease-in-out",
+                      border: "none",
+                      objectFit: "cover",
+                    }}
+                    muted
+                    autoPlay
+                    onEnded={handleVideoEnd}
+                  />
+                ) : (
+                  <img
+                    src={`${process.env.REACT_APP_API_URL}${previousImage.url}`}
+                    alt="Imagen anterior"
+                    style={{
+                      position: "absolute",
+                      width: "50%",
+                      height: "50%",
+                      top: 0,
+                      right: 0,
+                      opacity: 0,
+                      transition: "opacity 1s ease-in-out",
+                      border: "none",
+                      objectFit: "cover",
+                    }}
+                  />
+                )
+              )}
+              {currentImage && (
+                currentImage.type === "video" ? (
+                  <video
+                    src={`${process.env.REACT_APP_URL_IMAGE}${currentImage.url}`}
+                    style={{
+                      position: "absolute",
+                      width: "50%",
+                      height: "50%",
+                      top: 0,
+                      right: 0,
+                      border: "none",
+                      objectFit: "cover",
+                    }}
+                    muted
+                    autoPlay
+                    onEnded={handleVideoEnd}
+                  />
+                ) : (
+                  <img
+                    src={`${process.env.REACT_APP_URL_IMAGE}${currentImage.url}`}
+                    alt="Imagen actual"
+                    style={{
+                      position: "absolute",
+                      width: "50%",
+                      height: "50%",
+                      top: 0,
+                      right: 0,
+                      border: "none",
+                      objectFit: "cover",
+                    }}
+                  />
+                )
+              )}
+            </>
+          )}
           {turnDataCall && (
             <ContOnlyTurn>
               <div id="turno">
@@ -275,5 +354,25 @@ const ContIconExit = styled.div`
     path {
       stroke: #cecece;
     }
+  }
+`;
+
+const ContNoImages = styled.div`
+  width: 50%;
+  height: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f8f9fa;
+  border: 2px dashed #dee2e6;
+  border-radius: 10px;
+  
+  p {
+    color: #6c757d;
+    font-size: 1.2em;
+    text-align: center;
+    font-weight: 500;
+    padding: 20px;
+    line-height: 1.5;
   }
 `;
