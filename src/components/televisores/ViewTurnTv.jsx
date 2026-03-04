@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { getTurnsByTv } from "../../store/slice/televisores/televisoresThunk";
@@ -6,6 +6,7 @@ import { logOut } from "../../utils/logOutUtils";
 import { useNavigate } from "react-router-dom";
 import { existSession } from "../../assets/svg/svgs";
 import { getDataWithToken } from "../../utils/getDataToken";
+import io from "socket.io-client";
 
 const ViewTurnTv = () => {
   const navigate = useNavigate();
@@ -23,34 +24,66 @@ const ViewTurnTv = () => {
   const [previousImage, setPreviousImage] = useState(null);
   const [imagesLoading, setImagesLoading] = useState(true);
 
-  // Fetch images from API
-  useEffect(() => {
-    const fetchImages = async () => {
-      try {
-        setImagesLoading(true);
-        const res = await getDataWithToken("tv/images");
+  // Función para cargar imágenes (preserva el índice actual si es una actualización)
+  const fetchImages = useCallback(async (preserveIndex = false, currentIdx = 0) => {
+    try {
+      setImagesLoading(true);
+      const res = await getDataWithToken("tv/images");
+      
+      if (res.success && res.media && res.media.length > 0) {
+        setImages(res.media);
         
-        if (res.success && res.media && res.media.length > 0) {
-          setImages(res.media);
+        if (preserveIndex && currentIdx < res.media.length) {
+          // Mantener el índice actual si es válido
+          setCurrentImage(res.media[currentIdx]);
+          setPreviousImage(res.media[currentIdx]);
+        } else {
+          // Reiniciar al inicio si es la primera carga o el índice ya no es válido
           setCurrentImage(res.media[0]);
           setPreviousImage(res.media[0]);
-        } else {
-          setImages([]);
-          setCurrentImage(null);
-          setPreviousImage(null);
+          setCurrentImageIndex(0);
         }
-      } catch (error) {
-        console.error("Error fetching images:", error);
+      } else {
         setImages([]);
         setCurrentImage(null);
         setPreviousImage(null);
-      } finally {
-        setImagesLoading(false);
+        setCurrentImageIndex(0);
       }
+    } catch (error) {
+      console.error("Error fetching images:", error);
+      setImages([]);
+      setCurrentImage(null);
+      setPreviousImage(null);
+    } finally {
+      setImagesLoading(false);
+    }
+  }, []);
+
+  // Fetch images from API on mount
+  useEffect(() => {
+    fetchImages();
+  }, [fetchImages]);
+
+  // Escuchar evento socket para actualizar imágenes cuando se sincronicen
+  useEffect(() => {
+    const socket = io(process.env.REACT_APP_URL_SOCKET);
+
+    const handleMediaUpdate = (data) => {
+      console.log("📺 Imágenes actualizadas desde el servidor:", data);
+      // Recargar las imágenes manteniendo el índice actual
+      setCurrentImageIndex((prevIndex) => {
+        fetchImages(true, prevIndex);
+        return prevIndex;
+      });
     };
 
-    fetchImages();
-  }, []);
+    socket.on("tv-media-updated", handleMediaUpdate);
+
+    return () => {
+      socket.off("tv-media-updated", handleMediaUpdate);
+      socket.disconnect();
+    };
+  }, [fetchImages]);
 
   const goToNextMedia = React.useCallback(() => {
     setPreviousImage(images[currentImageIndex]);
@@ -81,28 +114,49 @@ const ViewTurnTv = () => {
   }, [currentImageIndex, images, goToNextMedia]);
 
   const inicio = () => {
-    console.log("inicio");
     setIsPlaying(true);
   };
 
-  useEffect(() => {
-    if (turnSound && !isPlaying && turnSound.url) {
-      console.log("hay sonido");
-      console.log(turnSound.url);
-      setUrl(turnSound.url);
-      setTurnDataCall(turnSound);
-      setIsPlaying(true);
-    } else if (turnSound.url) {
-      console.log("no hay sonido");
-      console.log(turnSound);
-      setAudiosPending(audiosPending.concat(turnSound));
-      console.log(audiosPending);
+  // Helper para construir URL de audio (local o externa)
+  const buildAudioUrl = (audioUrl) => {
+    if (!audioUrl) return "";
+    // Si es URL local (empieza con /uploads), añadir el prefijo de la API
+    if (audioUrl.startsWith("/uploads/")) {
+      return `${process.env.REACT_APP_URL_IMAGE}${audioUrl}`;
     }
-  }, [turnSound, audiosPending, isPlaying]);
+    // Si ya es URL completa (Firebase u otra), usarla directamente
+    return audioUrl;
+  };
+
+  useEffect(() => {
+    if (turnSound && turnSound.url) {
+      if (!isPlaying) {
+        setUrl(buildAudioUrl(turnSound.url));
+        setTurnDataCall(turnSound);
+        setIsPlaying(true);
+      } else {
+        setAudiosPending(prev => [...prev, turnSound]);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [turnSound]);
+
+  // Timeout de seguridad: ocultar mensaje después de 10 segundos si el audio no termina
+  useEffect(() => {
+    if (turnDataCall) {
+      const timeout = setTimeout(() => {
+        setTurnDataCall("");
+        setIsPlaying(false);
+        setUrl("");
+      }, 10000); // 10 segundos
+      
+      return () => clearTimeout(timeout);
+    }
+  }, [turnDataCall]);
 
   const termino = () => {
     if (audiosPending.length > 0) {
-      setUrl(audiosPending[0].url);
+      setUrl(buildAudioUrl(audiosPending[0].url));
       setTurnDataCall(audiosPending[0]);
       setAudiosPending(audiosPending.slice(1));
       return setIsPlaying(true);
@@ -117,7 +171,14 @@ const ViewTurnTv = () => {
 
   return (
     <MainContainerTurnTv>
-      {url && <audio src={url} autoPlay onPlay={inicio} onEnded={termino} />}
+      {url && (
+        <audio 
+          src={url} 
+          autoPlay 
+          onPlay={inicio} 
+          onEnded={termino}
+        />
+      )}
       <ContIconExit onClick={() => logOut(navigate)}>
         {existSession}
       </ContIconExit>
@@ -149,7 +210,7 @@ const ViewTurnTv = () => {
               {previousImage && (
                 previousImage.type === "video" ? (
                   <video
-                    src={`${process.env.REACT_APP_API_URL}${previousImage.url}`}
+                    src={previousImage.url.startsWith('http') ? previousImage.url : `${process.env.REACT_APP_URL_IMAGE}${previousImage.url}`}
                     style={{
                       position: "absolute",
                       width: "50%",
@@ -167,7 +228,7 @@ const ViewTurnTv = () => {
                   />
                 ) : (
                   <img
-                    src={`${process.env.REACT_APP_API_URL}${previousImage.url}`}
+                    src={previousImage.url.startsWith('http') ? previousImage.url : `${process.env.REACT_APP_URL_IMAGE}${previousImage.url}`}
                     alt="Imagen anterior"
                     style={{
                       position: "absolute",
@@ -186,7 +247,7 @@ const ViewTurnTv = () => {
               {currentImage && (
                 currentImage.type === "video" ? (
                   <video
-                    src={`${process.env.REACT_APP_URL_IMAGE}${currentImage.url}`}
+                    src={currentImage.url.startsWith('http') ? currentImage.url : `${process.env.REACT_APP_URL_IMAGE}${currentImage.url}`}
                     style={{
                       position: "absolute",
                       width: "50%",
@@ -202,7 +263,7 @@ const ViewTurnTv = () => {
                   />
                 ) : (
                   <img
-                    src={`${process.env.REACT_APP_URL_IMAGE}${currentImage.url}`}
+                    src={currentImage.url.startsWith('http') ? currentImage.url : `${process.env.REACT_APP_URL_IMAGE}${currentImage.url}`}
                     alt="Imagen actual"
                     style={{
                       position: "absolute",

@@ -83,9 +83,14 @@ export const deleteTurn = (id) => {
 export const endTurn = (id, data) => {
   console.log(id);
   return async (dispatch) => {
-    const response = await axiosInstance.put(`turn/endturn/${id}`);
-    console.log(response.data);
-    dispatch(setDataTurn({ option: "viewModal", value: false }));
-    // await getDataWithToken(`turn/asignedturn/${data.turnId}`, "POST", data);
+    try {
+      const response = await axiosInstance.put(`turn/endturn/${id}`);
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error finalizando turno:", error);
+    } finally {
+      // Siempre cerrar el modal, incluso si hay error
+      dispatch(setDataTurn({ option: "viewModal", value: false }));
+    }
   };
 };

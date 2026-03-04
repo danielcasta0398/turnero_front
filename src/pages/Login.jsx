@@ -20,8 +20,6 @@ const Login = () => {
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
   const [isDisabled, setIsDisabled] = useState(true);
-  const [errEmail, setErrEmail] = useState(false);
-  const [errPassword, setErrPassword] = useState(false);
 
   // Este Hook se ejecuta cuando se carga la pagina y verifica si hay una sesion activa
   useCheckSession([], "#/login");
@@ -33,31 +31,14 @@ const Login = () => {
   };
 
   const validateForm = (event) => {
-    if (event.name === "user") {
-      if (event.value.length < 4 && event.value.length !== 0) {
-        setErrEmail(true);
-      } else if (password.length >= 4 && event.value.length !== 0) {
-        setErrEmail(false);
-        return setIsDisabled(false);
-      } else {
-        setErrEmail(false);
-      }
-    }
+    const currentUser = event.name === "user" ? event.value : user;
+    const currentPassword = event.name === "password" ? event.value : password;
 
-    if (event.name === "password") {
-      if (event.value.length < 4 && event.value.length > 0) {
-        setErrPassword(true);
-      } else {
-        setErrPassword(false);
-      }
-    }
-
-    if (!errEmail) {
-      if (event.name === "password" && event.value.length >= 4) {
-        setIsDisabled(false);
-      } else {
-        setIsDisabled(true);
-      }
+    // Habilitar botón si ambos campos tienen al menos 1 caracter
+    if (currentUser.length > 0 && currentPassword.length > 0) {
+      setIsDisabled(false);
+    } else {
+      setIsDisabled(true);
     }
   };
 
@@ -99,9 +80,6 @@ const Login = () => {
                     setUser(e.target.value);
                     validateForm(e.target);
                   }}
-                  textError={
-                    errEmail && "El usuario debe tener al menos 4 caracteres"
-                  }
                   nameInput="user"
                 />
                 <InputBasic
@@ -113,10 +91,6 @@ const Login = () => {
                     setPassword(e.target.value);
                     validateForm(e.target);
                   }}
-                  textError={
-                    errPassword &&
-                    "La contraseña debe tener al menos 4 caracteres"
-                  }
                   nameInput="password"
                 />
 
