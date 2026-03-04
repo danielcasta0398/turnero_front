@@ -612,17 +612,24 @@ const LogoPreviewBox = styled.div`
   background-color: ${props => 
     props.darkBg 
       ? (props.isDragging ? '#2c2c2c' : '#333333')
-      : (props.isDragging ? '#f0f7ff' : '#f9f9f9')
+      : '#e8e8e8'
   };
+  background-image: ${props => 
+    props.darkBg 
+      ? 'none'
+      : `linear-gradient(45deg, #d0d0d0 25%, transparent 25%), 
+         linear-gradient(-45deg, #d0d0d0 25%, transparent 25%), 
+         linear-gradient(45deg, transparent 75%, #d0d0d0 75%), 
+         linear-gradient(-45deg, transparent 75%, #d0d0d0 75%)`
+  };
+  background-size: 20px 20px;
+  background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
   transition: all 0.2s ease;
   cursor: pointer;
   position: relative;
   
   &:hover {
     border-color: #305381;
-    background-color: ${props => 
-      props.darkBg ? '#2c2c2c' : '#f0f7ff'
-    };
   }
 
   img {

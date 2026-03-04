@@ -98,10 +98,21 @@ const ComoponentUploadImg = () => {
     setSelectedFiles(prev => prev.filter((_, index) => index !== indexToRemove));
   };
 
+  // Helper para construir URL completa (soporta Firebase y local)
+  const buildMediaUrl = (url) => {
+    if (!url) return "";
+    // Si ya es URL completa (Firebase), usarla directamente
+    if (url.startsWith("http://") || url.startsWith("https://")) {
+      return url;
+    }
+    // Si es URL local, añadir prefijo
+    return `${process.env.REACT_APP_URL_IMAGE}${url}`;
+  };
+
   // Helper function to download existing images as files
   const downloadImageAsFile = async (imageUrl, filename) => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_URL_IMAGE}${imageUrl}`);
+      const response = await fetch(buildMediaUrl(imageUrl));
       const blob = await response.blob();
       return new File([blob], filename, { type: blob.type });
     } catch (error) {
@@ -223,7 +234,7 @@ const ComoponentUploadImg = () => {
         const formData = new FormData();
         imageFiles.forEach((file) => {
           if (file) {
-            formData.append('images', file);
+            formData.append('media', file);
           }
         });
 
@@ -387,7 +398,7 @@ const ComoponentUploadImg = () => {
                    <>
                      {/* For videos, show first frame with video element or placeholder */}
                      <video 
-                       src={`${process.env.REACT_APP_URL_IMAGE}${image.url}`}
+                       src={buildMediaUrl(image.url)}
                        style={{
                          width: '100%',
                          height: '100%',
@@ -407,7 +418,7 @@ const ComoponentUploadImg = () => {
                    </>
                  ) : (
                    <img 
-                     src={`${process.env.REACT_APP_URL_IMAGE}${image.url}`} 
+                     src={buildMediaUrl(image.url)} 
                      alt={image.filename}
                    />
                  )}
@@ -443,7 +454,7 @@ const ComoponentUploadImg = () => {
           <VideoPreviewBackdrop onClick={closeVideoPreview} />
           <VideoPreviewContent>
             <video 
-              src={`${process.env.REACT_APP_URL_IMAGE}${previewVideo.url}`}
+              src={buildMediaUrl(previewVideo.url)}
               controls
               autoPlay
               style={{
