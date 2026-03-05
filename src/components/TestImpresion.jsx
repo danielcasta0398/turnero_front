@@ -16,7 +16,12 @@ function formatDate(date) {
 }
 
 export default function TestImpresion(props) {
-  const { configurationData } = useSelector((state) => state.configuration);
+  const { configurationData, lastUpdated } = useSelector((state) => state.configuration);
+  
+  // Construir URL con cache-busting
+  const logoSrc = configurationData?.logo_url 
+    ? `${process.env.REACT_APP_URL_IMAGE}${configurationData.logo_url}${lastUpdated ? `?t=${lastUpdated}` : ''}`
+    : '';
   const { isPrint, infoTurn } = useSelector((state) => state.turn);
   const componentRef = useRef();
 
@@ -38,7 +43,7 @@ export default function TestImpresion(props) {
 
     return (
       <Div ref={ref}>
-        <img src={`${process.env.REACT_APP_URL_IMAGE}${configurationData?.logo_url}`} alt="logo" width={"80px"} height="10px" />
+        <img src={logoSrc} alt="logo" width={"80px"} height="10px" />
         <h2>{infoTurn?.nameButton.toUpperCase()}</h2>
         <h1>{infoTurn?.sequence}</h1>
         <div>

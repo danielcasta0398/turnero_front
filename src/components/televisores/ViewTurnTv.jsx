@@ -12,7 +12,12 @@ const ViewTurnTv = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { turns } = useSelector((state) => state.televisores.turnsTv);
-  const { configurationData } = useSelector((state) => state.configuration);
+  const { configurationData, lastUpdated } = useSelector((state) => state.configuration);
+  
+  // Construir URL del logo con cache-busting
+  const logoSrc = configurationData?.logo_url 
+    ? `${process.env.REACT_APP_URL_IMAGE}${configurationData.logo_url}${lastUpdated ? `?t=${lastUpdated}` : ''}`
+    : '';
   let { turnSound } = useSelector((state) => state.televisores);
   const [url, setUrl] = React.useState("");
   const [isPlaying, setIsPlaying] = React.useState(false);
@@ -184,7 +189,7 @@ const ViewTurnTv = () => {
       </ContIconExit>
 
       <ContLogo>
-        <img src={`${process.env.REACT_APP_URL_IMAGE}${configurationData?.logo_url}`} alt="logo" style={{ maxWidth: "300px", maxHeight: "200px" }} />
+        <img src={logoSrc} alt="logo" style={{ maxWidth: "300px", maxHeight: "200px" }} />
       </ContLogo>
 
       <ContBodyTurnTv>

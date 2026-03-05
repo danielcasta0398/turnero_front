@@ -7,7 +7,11 @@ import { useSelector } from "react-redux";
 
 const Navigation = ({ userName }) => {
 
-  const { configurationData } = useSelector((state) => state.configuration);
+  const { configurationData, lastUpdated } = useSelector((state) => state.configuration);
+
+  // Construir URL con cache-busting
+  const logoUrl = configurationData?.logo_white_url || configurationData?.logo_url;
+  const logoSrc = logoUrl ? `${process.env.REACT_APP_URL_IMAGE}${logoUrl}${lastUpdated ? `?t=${lastUpdated}` : ''}` : '';
 
   const isMobile = useMediaQuery({ maxWidth: 520 });
   return isMobile ? (
@@ -30,7 +34,7 @@ const Navigation = ({ userName }) => {
     </ul>
   ) : (
     <Nav>
-      <img src={`${process.env.REACT_APP_URL_IMAGE}${configurationData?.logo_white_url || configurationData?.logo_url}`} alt="logo" />
+      <img src={logoSrc} alt="logo" />
       <UserNav userName={userName} />
     </Nav>
   );

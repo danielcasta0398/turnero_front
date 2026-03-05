@@ -19,8 +19,12 @@ import TestImpresion from "../components/TestImpresion";
 
 const TakeTurn = () => {
 
-  const { configurationData } = useSelector((state) => state.configuration);
-  console.log(configurationData);
+  const { configurationData, lastUpdated } = useSelector((state) => state.configuration);
+  
+  // Construir URL con cache-busting
+  const logoSrc = configurationData?.logo_url 
+    ? `${process.env.REACT_APP_URL_IMAGE}${configurationData.logo_url}${lastUpdated ? `?t=${lastUpdated}` : ''}`
+    : '';
   const isOpen = useSelector((state) => state.isOpenModal);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -81,7 +85,7 @@ const TakeTurn = () => {
       {isPrint && <TestImpresion />}
       {isOpen && <ModalKeyBoard />}
       <MainContainerTurn>
-        <img src={`${process.env.REACT_APP_URL_IMAGE}${configurationData?.logo_url}`} alt="Logo" />
+        <img src={logoSrc} alt="Logo" />
         <h1>Seleccione una opcion</h1>
         <div>
           {buttons?.buttons?.map(

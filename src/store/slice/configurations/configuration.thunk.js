@@ -27,15 +27,9 @@ export const updateConfiguration = (formData) => async (dispatch) => {
         const backendResponse = response.data;
         
         if (backendResponse.success) {
-            // Agregar timestamp para evitar cache de imágenes
-            const dataWithTimestamp = {
-                ...backendResponse.data,
-                logo_url: backendResponse.data.logo_url ? `${backendResponse.data.logo_url}?t=${Date.now()}` : backendResponse.data.logo_url,
-                logo_white_url: backendResponse.data.logo_white_url ? `${backendResponse.data.logo_white_url}?t=${Date.now()}` : backendResponse.data.logo_white_url
-            };
-            
-            dispatch(setDataConfiguration(dataWithTimestamp));
-            return { success: true, data: dataWithTimestamp };
+            // Guardar datos sin modificar - el componente maneja el cache-busting
+            dispatch(setDataConfiguration(backendResponse.data));
+            return { success: true, data: backendResponse.data };
         } else {
             return { success: false, error: backendResponse.message };
         }

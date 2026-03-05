@@ -21,6 +21,7 @@ const LogoConfig = () => {
   // Estado para loading y notificaciones
   const [isLoading, setIsLoading] = useState(false);
   const [notification, setNotification] = useState(null); // { type: 'success' | 'error', message: string }
+  const [imageKey, setImageKey] = useState(Date.now()); // Key para forzar recarga de imágenes
 
   // Función para procesar archivos del logo principal
   const processFilePrincipal = (file) => {
@@ -187,6 +188,9 @@ const LogoConfig = () => {
         setSelectedLogoBlanco(null);
         setPreviewLogoBlanco(null);
         
+        // Forzar recarga de imágenes actuales
+        setImageKey(Date.now());
+        
         // Mostrar notificación de éxito
         showNotification('success', '¡Logos actualizados correctamente! Los cambios se reflejarán automáticamente.');
       } else {
@@ -227,21 +231,21 @@ const LogoConfig = () => {
         <InfoIcon>ℹ️</InfoIcon>
         <div>
           <InfoText>
-            <strong>Logo Principal:</strong> Se usará en toda la aplicación (fondos claros).
+            <strong>🖼️ Logo Principal:</strong> Se muestra en el login, tickets de impresión y pantallas con fondo claro.
           </InfoText>
           <InfoText>
-            <strong>Logo Blanco:</strong> Se usará en fondos oscuros. Si no se proporciona, se usará el logo principal.
+            <strong>⚪ Logo Blanco:</strong> Se muestra en la barra de navegación (fondo azul oscuro) y pantallas de TV. Si no se configura, se usará el logo principal.
           </InfoText>
           <InfoText>
-            <strong>Recomendación:</strong> Usar imágenes PNG o SVG con fondo transparente. Tamaño óptimo: 280px de ancho.
+            <strong>💡 Recomendación:</strong> Usar imágenes PNG o SVG con fondo transparente. Tamaño óptimo: 280px de ancho.
           </InfoText>
         </div>
       </InfoContainer>
       
-      {/* Logo Principal (Obligatorio) */}
+      {/* Logo Principal */}
       <LogoSection>
         <LogoSectionTitle>
-          <h3>🖼️ Logo Principal</h3>
+          <h3>🖼️ Logo Principal (Fondos Claros)</h3>
           {isLogoPrincipalRequired ? (
             <RequiredBadge>Obligatorio</RequiredBadge>
           ) : (
@@ -254,7 +258,8 @@ const LogoConfig = () => {
             <h4>Actual</h4>
             <LogoPreviewBox>
               <img 
-                src={`${process.env.REACT_APP_URL_IMAGE}${configurationData?.logo_url}`} 
+                key={imageKey}
+                src={`${process.env.REACT_APP_URL_IMAGE}${configurationData?.logo_url}?t=${imageKey}`} 
                 alt="Logo principal actual" 
               />
             </LogoPreviewBox>
@@ -300,19 +305,20 @@ const LogoConfig = () => {
         </UploadContainer>
       </LogoSection>
 
-      {/* Logo Blanco (Opcional) */}
-      <LogoSection>
+      {/* Logo Blanco */}
+      <LogoSection style={{ backgroundColor: '#2c3e50' }}>
         <LogoSectionTitle>
-          <h3>⚪ Logo en Blanco</h3>
+          <h3 style={{ color: 'white' }}>⚪ Logo Blanco (Barra de Navegación y TVs)</h3>
           <OptionalBadge>Opcional</OptionalBadge>
         </LogoSectionTitle>
         
         <LogoPreviewContainer>
           <CurrentLogoContainer>
-            <h4>Actual</h4>
+            <h4 style={{ color: 'white' }}>Actual</h4>
             <LogoPreviewBox darkBg>
               <img 
-                src={`${process.env.REACT_APP_URL_IMAGE}${configurationData?.logo_white_url || configurationData?.logo_url}`} 
+                key={`white-${imageKey}`}
+                src={`${process.env.REACT_APP_URL_IMAGE}${configurationData?.logo_white_url || configurationData?.logo_url}?t=${imageKey}`} 
                 alt="Logo blanco actual" 
                 onError={(e) => {
                   // Si no existe logo-blanco.png, mostrar el logo principal
@@ -323,7 +329,7 @@ const LogoConfig = () => {
           </CurrentLogoContainer>
           
           <NewLogoContainer>
-            <h4>Nuevo</h4>
+            <h4 style={{ color: 'white' }}>Nuevo</h4>
             <LogoPreviewBox
               darkBg
               isDragging={isDraggingBlanco}
